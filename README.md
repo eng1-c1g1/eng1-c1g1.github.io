@@ -1,4 +1,4 @@
-# ENG1 Cohort 1, Group 11
+Welcome to cohort 1 group 11's website! Below are the documents, source code and binaries for our project, as well as some additonal documentation.
 
 ## PDF Documents for Assessment 1
 
