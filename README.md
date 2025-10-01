@@ -15,9 +15,9 @@
 
 ## Additional Content
 
-| User Requirements Table |  |  |
-| ----- | ----- | ----- |
+### User Requirements Table
 | ID | Description  | Priority  |
+| ----- | ----- | ----- |
 | UR\_ESCAPE\_MAZE | The User must be able to escape from a maze | Shall |
 | UR\_POWER\_UPS | The User may collect powerups to escape faster | May |
 | UR\_TIME\_LIMIT | The user must escape the maze within a 5 minute time limit | Shall |
