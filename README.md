@@ -3,7 +3,7 @@
 Below are the documents, source code, binaries for our project, and additional documentation.
 
 ---
-<div style="background:#f9f9f9; padding:15px; border-radius:8px; margin-bottom:20px;">
+
 ## 📄 **PDF Documents for Assessment 1**
 
 | Document Name                  | Link                                |
@@ -13,20 +13,15 @@ Below are the documents, source code, binaries for our project, and additional d
 | 📊**Method Selection & Planning**    |📎 [View](http://example.com) |
 | 📋**Requirements**                   |📎 [View](http://example.com) |
 | ⚠️**Risk Assessment & Mitigation**   |📎 [View](http://example.com) |
-</div>
 
-<hr style="border-top: 2px solid #ddd; margin: 30px 0;">
-
-<div style="background:#f9f9f9; padding:15px; border-radius:8px; margin-bottom:20px;">
 ## 🛠️ **Source Code & Binaries**
 
 - 📎[GitHub Repository](http://example.com)
 - 📎[Executable JAR](http://example.com)
-</div>
+
 
 <hr style="border-top: 2px solid #ddd; margin: 30px 0;">
 
-<div style="background:#f9f9f9; padding:15px; border-radius:8px; margin-bottom:20px;">
 ## 📚 **Additional Content**
 
 - 📎[Notion Project Tracker](https://www.notion.so/ENG-1-Cohort-1-Group-11-27fedfe88d848037b001d8861813dfa?source=copy_link)
@@ -35,7 +30,7 @@ Below are the documents, source code, binaries for our project, and additional d
 
 <hr style="border-top: 2px solid #ddd; margin: 30px 0;">
 
-<div style="background:#f9f9f9; padding:15px; border-radius:8px; margin-bottom:20px;">
+
 ## ✅ **User Requirements Table**
 
 | ID               | Description                                               | Priority |
@@ -47,4 +42,4 @@ Below are the documents, source code, binaries for our project, and additional d
 | UR_UI             | The user shall have a smooth experience navigating the game | -      |
 | UR_MAZE           | There must be a maze for the user to escape from         | Shall    |
 | UR_DEAN           | There must be a dean that the user must avoid            | Shall    |
-</div>
+
