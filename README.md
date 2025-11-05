@@ -28,6 +28,16 @@ Below are the documents, source code, binaries for our project, and additional d
 
 ---
 
+## 💡**Our key Technical Contributions**
+## 🚀 **What We Built for You**
+
+| Feature | Description | Link |
+|----------|--------------|------|
+| 🧩 Debugging Tools | Built-in logging & error tracking system | [View on GitHub](http://example.com) |
+| 🧱 Rendering System | Modular rendering pipeline | [View Demo](http://example.com) |
+| 🛠️ Editor | Drag-and-drop level editor | [View Screenshot](http://example.com) |
+| ⚙️ Time Step Engine | Fixed time-step for consistent performance | [See Code](http://example.com) |
+
 
 ## ✅ **User Requirements Table**
 
