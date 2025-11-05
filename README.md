@@ -29,24 +29,17 @@ Below are the documents, source code, binaries for our project, and additional d
 ---
 
 ## 💡**Our key Technical Contributions**
-## 🚀 **What We Built for You**
 
 | Feature | Description | Link |
 |----------|--------------|------|
-| 🧩 **Debugging Tools** | collision debugger for finding and fixing issues quickly
-| [View on GitHub](http://example.com) |
-| 🧱 **Generalised Rendering System** | Rendering system works for all levels and objects
-| [View Demo](http://example.com) |
-| 🧰 **Editor (Drag-and-Drop)** | Interactive editor for easy level design with drag-and-drop
-| [View Screenshot](http://example.com) |
-| 🧪 **Easily Testable Code** | Modular code to make testing simple 
-| [See Code](http://example.com) |
+| 🧩 **Debugging Tools** | collision debugger for finding and fixing issues quickly| [View on GitHub](http://example.com) |
+| 🧱 **Generalised Rendering System** | Rendering system works for all levels and objects| [View Demo](http://example.com) |
+| 🧰 **Editor (Drag-and-Drop)** | Interactive editor for easy level design with drag-and-drop| [View Screenshot](http://example.com) |
+| 🧪 **Easily Testable Code** | Modular code to make testing simple | [See Code](http://example.com) |
 | 🧠 **Extreme Decoupling** | Easy to update due to clean separation between modules for fliexibility and easy extension | [Learn More](http://example.com) |
-| 🎮 **Reusable Player-Entity Interaction System** | Flexible system for player and entity 
-| [View on GitHub](http://example.com) |
+| 🎮 **Reusable Player-Entity Interaction System** | Flexible system for player and entity | [View on GitHub](http://example.com) |
 | 🗂️ **Centralised Asset Management System** | Assets managed centrally for easy access such as sounds and textures. | [View Docs](http://example.com) |
-| ⚙️ **Fixed Time-Step Engine** | Ensures consistent performance on all devices
-| [See Implementation](http://example.com) |
+| ⚙️ **Fixed Time-Step Engine** | Ensures consistent performance on all devices| [See Implementation](http://example.com) |
 
 ## ✅ **User Requirements Table**
 
