@@ -20,15 +20,14 @@ Below are the documents, source code, binaries for our project, and additional d
 - 📎[Executable JAR](http://example.com)
 
 
-<hr style="border-top: 2px solid #ddd; margin: 30px 0;">
+
 
 ## 📚 **Additional Content**
 
 - 📎[Notion Project Tracker](https://www.notion.so/ENG-1-Cohort-1-Group-11-27fedfe88d848037b001d8861813dfa?source=copy_link)
-</div>
 
 
-<hr style="border-top: 2px solid #ddd; margin: 30px 0;">
+
 
 
 ## ✅ **User Requirements Table**
