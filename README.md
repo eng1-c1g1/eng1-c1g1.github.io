@@ -18,7 +18,7 @@ Below are the documents, source code, binaries for our project, and additional d
 
 ## 🛠️ **Source Code & Binaries**
 
-- 📎 [GitHub Repository](http://example.com)
+- 📎[GitHub Repository](http://example.com)
 - 📎[Executable JAR](http://example.com)
 
 ---
