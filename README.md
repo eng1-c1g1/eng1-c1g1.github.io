@@ -11,7 +11,7 @@ Below are the documents, source code, binaries for our project, and additional d
 | 🏗️**Architecture**                   |📎 [View](https://docs.google.com/document/d/1VWEBIGhYX-dHWcc5yUUEUAMqSP19-GA-GZRUQhdQzU8/edit?tab=t.0#heading=h.jfsbl5rxnizp) |
 | 💻**Implementation**                 |📎 [View](https://docs.google.com/document/d/1-fG7q55DeXajzrxo1ggfW4zpGLjwV7cc0SoTdWO0_cA/edit?tab=t.0#heading=h.jfsbl5rxnizp) |
 | 📊**Method Selection & Planning**    |📎 [View](https://docs.google.com/document/d/1bhRj7-zyHSUiPtp9DgKJPN5mhjcWwNzEUupdvXSzbng/edit?tab=t.0#heading=h.jfsbl5rxnizp) |
-| 📋**Requirements**                   |📎 [View](https://docs.google.com/document/d/1bxOIGIrXyXTpwaCIAnqtrXOml0hehnkAKW8EJ7yHmwQ/edit?tab=t.0#heading=h.jfsbl5rxnizp)) |
+| 📋**Requirements**                   |📎 [View](https://docs.google.com/document/d/1bxOIGIrXyXTpwaCIAnqtrXOml0hehnkAKW8EJ7yHmwQ/edit?tab=t.0#heading=h.jfsbl5rxnizp) |
 | ⚠️**Risk Assessment & Mitigation**   |📎 [View](https://docs.google.com/document/d/1XoTuO3CZR3b51g8yo2V59H_yjzBjtp2aEZOAU0mMzHE/edit?tab=t.0) |
 
 ---
