@@ -1,8 +1,13 @@
 #  **Welcome to Cohort 1 Group 11's Website!**
 
-Below are the documents, source code, binaries for our project, and additional documentation.
+Here you can see what we've built and the key technical contributions.
 
 ---
+## **Key Technical Contributions**
+- **ECS** - Efficient project structure
+- **Fixed Step System** - Inspired by Unity for consistent simulation
+- **Modular System** - Flexible and well-structured
+  
 
 ##  **PDF Documents for Assessment 1**
 
