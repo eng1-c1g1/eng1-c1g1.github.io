@@ -1,7 +1,7 @@
 #  **Welcome to Cohort 1 Group 11's Website!**
 
 This website introduces our group project for ENG1 Assessment 1, including key documents, source code, and other materials
-.
+
 
 ---
 ## **Overview**
@@ -15,6 +15,7 @@ This ENG1 Assessment 1 is based on a given scenario: a single-player game where 
   
 [See more details of technical contributions](architecture.md)
   
+---
 
 ##  **PDF Documents for Assessment 1**
 
