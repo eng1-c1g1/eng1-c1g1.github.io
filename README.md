@@ -8,11 +8,11 @@ Below are the documents, source code, binaries for our project, and additional d
 
 | Document Name                  | Link                                |
 |--------------------------------|--------------------------------     |
-| 🏗️**Architecture**                   |📎 [View](http://example.com) |
-| 💻**Implementation**                 |📎 [View](http://example.com) |
-| 📊**Method Selection & Planning**    |📎 [View](http://example.com) |
-| 📋**Requirements**                   |📎 [View](http://example.com) |
-| ⚠️**Risk Assessment & Mitigation**   |📎 [View](http://example.com) |
+| 🏗️**Architecture**                   |📎 [View](https://docs.google.com/document/d/1VWEBIGhYX-dHWcc5yUUEUAMqSP19-GA-GZRUQhdQzU8/edit?tab=t.0#heading=h.jfsbl5rxnizp) |
+| 💻**Implementation**                 |📎 [View](https://docs.google.com/document/d/1-fG7q55DeXajzrxo1ggfW4zpGLjwV7cc0SoTdWO0_cA/edit?tab=t.0#heading=h.jfsbl5rxnizp) |
+| 📊**Method Selection & Planning**    |📎 [View](https://docs.google.com/document/d/1bhRj7-zyHSUiPtp9DgKJPN5mhjcWwNzEUupdvXSzbng/edit?tab=t.0#heading=h.jfsbl5rxnizp) |
+| 📋**Requirements**                   |📎 [View]([http://example.com](https://docs.google.com/document/d/1bxOIGIrXyXTpwaCIAnqtrXOml0hehnkAKW8EJ7yHmwQ/edit?tab=t.0#heading=h.jfsbl5rxnizp)) |
+| ⚠️**Risk Assessment & Mitigation**   |📎 [View](https://docs.google.com/document/d/1XoTuO3CZR3b51g8yo2V59H_yjzBjtp2aEZOAU0mMzHE/edit?tab=t.0) |
 
 ---
 ## 🛠️ **Source Code & Binaries**
@@ -32,14 +32,14 @@ Below are the documents, source code, binaries for our project, and additional d
 
 | Feature | Description | Link |
 |----------|--------------|------|
-| 🧩 **Debugging Tools** | collision debugger for finding and fixing issues quickly| [View](http://example.com) |
-| 🧱 **Generalised Rendering System** | Rendering system works for all levels and objects| [View](http://example.com) |
-| 🧰 **Editor (Drag-and-Drop)** | Interactive editor for easy level design with drag-and-drop| [View](http://example.com) |
-| 🧪 **Easily Testable Code** | Modular code to make testing simple | [View](http://example.com) |
-| 🧠 **Extreme Decoupling** | Easy to update due to clean separation between modules for fliexibility and easy extension | [View](http://example.com) |
-| 🎮 **Reusable Player-Entity Interaction System** | Flexible system for player and entity | [View ](http://example.com) |
-| 🗂️ **Centralised Asset Management System** | Assets managed centrally for easy access such as sounds and textures. | [View](http://example.com) |
-| ⚙️ **Fixed Time-Step Engine** | Ensures consistent performance on all devices| [View](http://example.com) |
+|  **Debugging Tools** | collision debugger for finding and fixing issues quickly| [View](http://example.com) |
+|  **Generalised Rendering System** | Rendering system works for all levels and objects| [View](http://example.com) |
+|  **Editor (Drag-and-Drop)** | Interactive editor for easy level design with drag-and-drop| [View](http://example.com) |
+|  **Easily Testable Code** | Modular code to make testing simple | [View](http://example.com) |
+|  **Extreme Decoupling** | Easy to update due to clean separation between modules for fliexibility and easy extension | [View](http://example.com) |
+|  **Reusable Player-Entity Interaction System** | Flexible system for player and entity | [View ](http://example.com) |
+|  **Centralised Asset Management System** | Assets managed centrally for easy access such as sounds and textures. | [View](http://example.com) |
+|  **Fixed Time-Step Engine** | Ensures consistent performance on all devices| [View](http://example.com) |
 
 ## ✅ **User Requirements Table**
 
