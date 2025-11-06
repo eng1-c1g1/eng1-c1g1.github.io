@@ -7,6 +7,7 @@ Here you can see what we've built and the key technical contributions.
 - **ECS** - Efficient project structure
 - **Fixed Step System** - Inspired by Unity for consistent simulation
 - **Modular System** - Flexible and well-structured
+  [See more details of technical contributions ->](architecture.md)
   
 
 ##  **PDF Documents for Assessment 1**
