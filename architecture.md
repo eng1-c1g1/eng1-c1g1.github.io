@@ -1,8 +1,3 @@
----
-title: Architecture
-permalink: /architecture
-layout: default
----
 
 # Architecture Overview
 Detailed information of our technical contributions in *Escape from Uni*.
