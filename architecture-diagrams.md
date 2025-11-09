@@ -5,7 +5,7 @@ permalink: /architecture-diagrams/
 
 ---
 
-## Edited version of diagrams
+## **Edited version of diagrams**
 
 **Behaviour Activity** [View PNG](https://drive.google.com/file/d/1hxaIvMO7SvuDvgEDbA2aJ2fF154yfSUj/view?usp=sharing)
 
