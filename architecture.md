@@ -80,7 +80,6 @@ Detailed information of our technical contributions in *Escape from Uni*.
 ---
 
 ## **Diagrams:** 
-
 [see more diagrams](architecture-diagrams.md)
 
 
