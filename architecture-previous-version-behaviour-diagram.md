@@ -10,3 +10,5 @@ title: Previous behaviour diagram
 **Behaviour Version 3:** [View PNG](https://drive.google.com/file/d/1Fl3_JhjlL1PmzAV2UUsMrtrjxYwxxFNO/view?usp=sharing)
 
 **Behaviour Version 4:** [View PNG](https://drive.google.com/file/d/1WVPPWUf1Tkw0rmcd8H8p3qC_tliFGqnT/view?usp=sharing)
+
+**Behaviour Prototype:** [View PNG](https://drive.google.com/file/d/1ZaaL7jaCxrsgJTUw3ZP4sReMdIJckH5i/view?usp=sharing)
