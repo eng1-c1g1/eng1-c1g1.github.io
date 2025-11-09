@@ -2,13 +2,21 @@
 layout: default
 title: Previous version of structural diagrams
 ---
-**Structural Version 1:** [View PNG](https://drive.google.com/file/d/1cI2dwEghF8Bzaj1nn8TXwcDwxq4tiXef/view?usp=sharing)
+**Structural Version 1:** 
+<img src="{{ '/assets/images/architecture-structural-diagramVersion1.png' | relative_url }}" alt="Structural Version 1" width="700">
 
-**Structural Version 2:** [View PNG](https://drive.google.com/file/d/18CrlBU3u6zD7bRJP0FmSJu_vYjHuI5sK/view?usp=sharing)
 
-**Structural Version 3:** [View PNG](https://drive.google.com/file/d/1yA3WU8GUthXbw467v7VN23c85KsCexhd/view?usp=sharing)
+**Structural Version 2:** 
+<img src="{{ '/assets/images/architecture-structural-diagramVersion2.png' | relative_url }}" alt="Structural Version 2" width="700">
 
-**Structural Version 4:** [View PNG](https://drive.google.com/file/d/1chwh0GFGk-1GBUbm8n3idnYuhKOy4Hqi/view?usp=sharing)
+
+**Structural Version 3:** 
+<img src="{{ '/assets/images/architecture-structural-diagramVersion3.png' | relative_url }}" alt="Structural Version 3" width="700">
+
+
+**Structural Version 4:** 
+<img src="{{ '/assets/images/architecture-structural-diagramVersion4.png' | relative_url }}" alt="Structural Version 4" width="700">
+
 
 
 
