@@ -3,7 +3,7 @@ layout: page
 title: CRC Card Tables
 ---
 
-# CRC Card Table
+
 
 We used Class–Responsibility–Collaborator (CRC) cards to plan how different parts of our game fit together in the Entity–Component–System (ECS) architecture.  
 Each CRC card explains what something does (its responsibility) and who it works with (its collaborators).
