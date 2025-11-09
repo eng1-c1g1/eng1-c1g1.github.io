@@ -1,3 +1,10 @@
+---
+layout: default
+title: Architecture Diagrams
+permalink: /architecture-diagrams/
+
+---
+
 # Architecture UML Diagrams
 
 ---
