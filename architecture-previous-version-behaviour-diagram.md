@@ -6,8 +6,9 @@ title: Previous behaviour diagram
 **Behaviour Version 1:** 
 <img src="{{ '/assets/images/architecture-behavioural-diagramVersion1.png' | relative_url }}" alt="Behaviour Version 1" width="700">
 
+
 **Behaviour Version 2:**
-<img src="{{ '/assets/images/architecture-behaviuoral-diagramVersion2.png' | relative_url }}" alt="Behaviour Version 2" width="700">
+<img src="{{ '/assets/images/architecture-behavioural-diagramVersion2.png' | relative_url }}" alt="Behaviour Version 2" width="700">
 
 
 **Behaviour Version 3:** 
