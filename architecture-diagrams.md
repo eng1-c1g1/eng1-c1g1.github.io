@@ -11,18 +11,10 @@ permalink: /architecture-diagrams/
 <img src="{{ '/assets/images/architecture-behavioural-diagram.png' | relative_url }}" alt="Behavioural Diagram" width="700">
 
 
-
-
-
-
-
-
-
 **Structural** 
-<img src="{{ '/assets/images/architecture-structural-diagram.png' | relative_url }}" alt="Structural Diagram" style="max-width:900px; margin-bottom:40px; display:block;">
-
-
+<img src="{{ '/assets/images/architecture-structural-diagram.png' | relative_url }}" alt="Structural Diagram" style="width:100%; max-width:1100px; margin:20px 0 50px 0; display:block;">
 
 
 **Class** 
-<img src="{{ '/assets/images/architecture-class-diagram.png' | relative_url }}" alt="Class Diagram" width="600">
+<br>
+<img src="{{ '/assets/images/architecture-class-diagram.png' | relative_url }}" alt="Class Diagram" style="margin-top:10px;" width="700">
