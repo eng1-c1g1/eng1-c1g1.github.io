@@ -7,7 +7,7 @@ permalink: /architecture
 Detailed information of our technical contributions in *Escape from Uni*.
 
 ---
-
+<a id="debugging-tools"></a
 ## Debugging Tools 
 **What:** It displays green hitbox lines, grid lines, a small box at the player's feet, an interaction circle and a center X so collision and alignment areas are visible on screen.
 
