@@ -19,7 +19,7 @@ permalink: /architecture-diagrams/
 
 
 **Structural** 
-<img src="{{ '/assets/images/architecture-structural-diagram.png' | relative_url }}" alt="Structural Diagram" width="900">
+<img src="{{ '/assets/images/architecture-structural-diagram.png' | relative_url }}" alt="Structural Diagram" style="max-width:900px; margin-bottom:40px; display:block;">
 
 
 
