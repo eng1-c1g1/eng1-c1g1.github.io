@@ -5,7 +5,7 @@ title: Welcome to Cohort 1 Group 11's Website!
 
 ## **Welcome to Cohort 1 Group 11's Website!**
 
-This website introduces our group project for ENG1 Assessment 1, including key documents, source code, and other materials
+This website introduces our group project for ENG1 Assessment 1, including key documents, source code, and other materials.
 
 ---
 ## **Overview**
