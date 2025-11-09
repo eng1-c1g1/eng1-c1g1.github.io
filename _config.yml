@@ -2,21 +2,3 @@ url: "https://eng1-c1g11.github.io"
 baseurl: ""
 theme: minima
 
----
-# Order title manually
----
-
-nav:
-  - title: "Welcome to Cohort 1 Group 11's Website!"
-    url: /
-  - title: "Architecture Diagrams"
-    url: /architecture-diagrams/
-  - title: "Previous version of diagrams"
-    url: /architecture-previous/
-  - title: "CRC card table"
-    url: /crc-card-table/
-  - title: "Architecture"
-    url: /architecture/
-  - title: "Key-talking-points"
-    url: /key-talking-points/
-
