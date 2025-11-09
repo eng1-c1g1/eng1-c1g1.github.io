@@ -20,3 +20,6 @@ permalink: /architecture-diagrams/
 **Class** 
 <br>
 <img src="{{ '/assets/images/architecture-class-diagram.png' | relative_url }}" alt="Class Diagram" style="margin-top:10px;" width="700">
+
+**Sequence**
+
