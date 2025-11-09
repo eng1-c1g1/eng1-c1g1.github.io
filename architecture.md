@@ -79,7 +79,7 @@ Detailed information of our technical contributions and diagrams in *Escape from
 
 ---
 
-##Diagrams
+## Diagrams
 
 **Behaviour** [View PNG](https://drive.google.com/file/d/1hxaIvMO7SvuDvgEDbA2aJ2fF154yfSUj/view?usp=sharing)
 
