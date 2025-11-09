@@ -80,6 +80,6 @@ Detailed information of our technical contributions in *Escape from Uni*.
 ---
 
 ## **Diagrams:** 
-[see more diagrams][see more diagrams]({{ '/architecture-diagrams/' | relative_url }})
+[see more diagrams][see more diagrams](architecture-diagrams.md)
 
 
