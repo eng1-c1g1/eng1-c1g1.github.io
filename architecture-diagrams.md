@@ -8,7 +8,7 @@ permalink: /architecture-diagrams/
 ## Edited version of diagrams
 
 **Behaviour Activity**
-<img src="{{ '/assets/images/new-architecture-behavorial-diagram.png' | relative_url }}" 
+<img src="https://drive.google.com/uc?export=view&id=1uCpKBLuEpJcG3DI_PvmUwuo8-sFHkngl"
      alt="Behavioural Diagram" width="700">
 
 **Structural** 
