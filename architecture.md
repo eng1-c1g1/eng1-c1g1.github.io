@@ -80,5 +80,7 @@ Detailed information of our technical contributions in *Escape from Uni*.
 ---
 ##Digrams
 **Behaviour** [View PNG](https://drive.google.com/file/d/1hxaIvMO7SvuDvgEDbA2aJ2fF154yfSUj/view?usp=sharing)
+
 **Structural**[View PNG](https://drive.google.com/file/d/1u5mS6RA8sfPP_-Pos1E7p03KQXEv-1Rw/view?usp=drive_link)
+
 **Class**[View PNG](https://drive.google.com/file/d/1_CX5Tm_QZ_Ze2ZgUNvc4u5Z5iBBsAd4E/view?usp=drive_link)
