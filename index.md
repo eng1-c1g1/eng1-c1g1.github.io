@@ -41,11 +41,6 @@ This ENG1 Assessment 1 is based on a given scenario: a single-player game where 
   
 ---
 
-##  **Additional Content**
 
-- [Notion Project Tracker](https://www.notion.so/ENG-1-Cohort-1-Group-11-27fedfe88d848037b001d8861813dfa?source=copy_link)
-
-
----
 
 
