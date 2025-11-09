@@ -10,7 +10,7 @@ An overview of our team's key contributions to Escape from Uni.
 
 | Feature | Description | Link |
 |----------|-------------|------|
-|  **Debugging Tools** | collision debugger for finding and fixing issues quickly | [View](architecture.md) |
+|  **Debugging Tools** | collision debugger for finding and fixing issues quickly | [View](/architecture#debugging-tools) |
 |  **Generalised Rendering System** | Rendering system works for all levels and objects | [View](architecture.md) |
 |  **Editor (Drag-and-Drop)** | Allows users to place objects such as collectables and enemies directly into levels via drag-and-drop | [View](architecture.md) |
 |  **Easily Testable Code** | Modular code to make testing simple | [View](architecture.md) |
