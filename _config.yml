@@ -5,11 +5,11 @@ theme: minima
 
 header_pages:
   - index.md
+  - key-talking-points.md
   - architecture/index.md
   - architecture-diagrams.md
   - architecture-previous-version-behaviour-diagram.md
   - architecture-previous-version-structural-diagrams.md
-  - key-talking-points.md
   - crc-card-table.md
 
 
