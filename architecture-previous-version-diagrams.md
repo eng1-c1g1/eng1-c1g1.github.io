@@ -1,6 +1,6 @@
 ---
 layout: default
-Title: Previous version of diagrams
+title: Previous version of diagrams
 ---
 **Structural Version 1:** [View PNG](https://drive.google.com/file/d/1cI2dwEghF8Bzaj1nn8TXwcDwxq4tiXef/view?usp=sharing)
 
