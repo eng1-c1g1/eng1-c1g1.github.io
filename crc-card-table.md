@@ -4,22 +4,24 @@ title: CRC card table
 ---
 
 ## **CRC card table:** 
-**Camera follow component:** <img src="https://drive.google.com/uc?export=view&id=1gkrZBjii2J8OO2U-k9Ig_AgNJO1ZU5qS" alt="Camera Follow CRC" width="700">
+**Camera follow component:** <img src="{{ '/assets/images/camera-follow.png' | relative_url }}" alt="Camera Follow CRC" style="width:100%; max-width:700px;">
 
-**Goose component:** <img src="https://drive.google.com/uc?export=view&id=1zdm25d-uMto4Y1kLolVEMeIKj6TopdKG" alt="Goose CRC" width="700">
-
-**Interactable component:** <img src="https://drive.google.com/uc?export=view&id=1SEwzGpSzC1dxM4jcibdzKC_6ZucgC6jz" alt="Interactable CRC" width="700">
+**Goose component:** <img src="{{ '/assets/images/goose.png' | relative_url }}" alt="Goose CRC" style="width:100%; max-width:700px;">
 
 
-**Physics component:** <img src="https://drive.google.com/uc?export=view&id=1pbvpAmI6OSLU8UmBGrU_iURrHkqnlvYm" alt="Physics CRC" width="700">
+**Interactable component:** <img src="{{ '/assets/images/interactable.png' | relative_url }}" alt="Interactable CRC" style="width:100%; max-width:700px;">
 
 
-**Player component:** <img src="https://drive.google.com/uc?export=view&id=1FoGVLjDraxpKYcLMtvkhFJyP3johajRs" alt="Player CRC" width="700">
-
-**Sprite component:** <img src="https://drive.google.com/uc?export=view&id=1kmyg3tW4WGZrn20cQVdc-3KenV2Khp_e" alt="Sprite CRC" width="700">
-
-**Timer component:** <img src="https://drive.google.com/uc?export=view&id=1D3Pr46fkJFciIGuUSTtMnsJNmpnfUGND" alt="Timer CRC" width="700">
+**Physics component:** <img src="{{ '/assets/images/physics.png' | relative_url }}" alt="Physics CRC" style="width:100%; max-width:700px;">
 
 
-**Transform component:** <img src="https://drive.google.com/uc?export=view&id=1txdkcCN06ZFQA26a8f2EpGAN4zcfMTiT" alt="Transform CRC" width="700">
+
+**Player component:** <img src="{{ '/assets/images/player.png' | relative_url }}" alt="Player CRC" style="width:100%; max-width:700px;">
+
+**Sprite component:** <img src="{{ '/assets/images/sprite.png' | relative_url }}" alt="Sprite CRC" style="width:100%; max-width:700px;">
+
+**Timer component:** <img src="{{ '/assets/images/timer.png' | relative_url }}" alt="Timer CRC" style="width:100%; max-width:700px;">
+
+
+**Transform component:** <img src="{{ '/assets/images/transform.png' | relative_url }}" alt="Transform CRC" style="width:100%; max-width:700px;">
 
