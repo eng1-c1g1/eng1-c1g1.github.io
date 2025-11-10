@@ -17,7 +17,4 @@ title: Structural Diagram Version History
 **Structural Version 4:** 
 <img src="{{ '/assets/images/architecture-structural-diagramVersion4.png' | relative_url }}" alt="Structural Version 4" width="700">
 
-
-
-
 ---
