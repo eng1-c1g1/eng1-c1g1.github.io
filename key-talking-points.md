@@ -8,6 +8,9 @@ title: Technical Information
 ## **Our Key Technical Contributions**
 An overview of our team's key contributions to Escape from Uni.
 
+**Codebase Javadoc**
+- <span style="fond-size:1eml">[Javadoc][/javadoc]</span>
+
 
 | Feature | Description | Link |
 |----------|-------------|------|
