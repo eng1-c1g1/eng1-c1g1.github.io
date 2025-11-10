@@ -19,8 +19,8 @@ This ENG1 Assessment 1 is based on a given scenario: a single-player game where 
 |--------------------------------|--------------------------------     |
 | **Architecture**                   | <a href="/assets/Arch1.pdf" target="_blank">View</a> |
 | **Implementation**                 | <a href="/assets/Impl1.pdf" target="_blank">View</a> |
-| **Method Selection & Planning**    | [View](https://docs.google.com/document/d/1bhRj7-zyHSUiPtp9DgKJPN5mhjcWwNzEUupdvXSzbng/edit?tab=t.0#heading=h.jfsbl5rxnizp) |
-| **Requirements** | <a href="/assets/Req1.pdf" target="_blank">View</a> |
+| **Method Selection & Planning**    | <a href="/assets/Plan1.pdf" target="_blank">View</a> |
+| **Requirements**                   | <a href="/assets/Req1.pdf" target="_blank">View</a> |
 | **Risk Assessment & Mitigation**   | <a href="/assets/Risk1.pdf" target="_blank">View</a> |
 
 ---
