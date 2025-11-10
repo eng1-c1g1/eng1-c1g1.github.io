@@ -1,6 +1,6 @@
 ---
-layout: default
-title: weekly tasks
+layout: page
+title: Weekly Tasks
 ---
 
 **Week 1:**

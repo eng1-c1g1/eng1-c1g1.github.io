@@ -1,7 +1,7 @@
 ---
 
-layout: default
-title: Key-talking-points
+layout: page
+title: Technical Information
 ---
 
 

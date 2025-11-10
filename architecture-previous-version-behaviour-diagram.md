@@ -1,6 +1,6 @@
 ---
-layout: default
-title: Previous behaviour diagram
+layout: page
+title: Previous Behaviour Diagrams
 ---
 
 **Behaviour Version 1:** 

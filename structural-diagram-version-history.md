@@ -1,6 +1,6 @@
 ---
-layout: default
-title: Previous version of structural diagrams
+layout: page
+title: Structural Diagram Version History
 ---
 **Structural Version 1:** 
 <img src="{{ '/assets/images/architecture-structural-diagramVersion1.png' | relative_url }}" alt="Structural Version 1" width="700">
