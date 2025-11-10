@@ -50,7 +50,7 @@ These tables show the week-by-week progress of our project. Each entry summarise
 
 | **Tasks Completed** | **Tasks for the Week** | **Task Priorities** | **Task Dependencies** | **Start Date** | **End Date** |
 |----------------------|------------------------|----------------------|------------------------|----------------|---------------|
-| * Read Assessment document<br> * Complete Risk Assessment<br> * Get initial requirements<br> * Interview Customer<br> * Research Architecture | * Start Game Development:<br> * Create player sprite<br> * Create physics system<br> * Create rendering system<br> * Create environment to move around in<br> * Interview customer<br> * Finalise requirements<br> * Start Architecture Document<br> * Continue method selection and planning | * High<br> * High<br> * Medium | We realised the Architecture document would take the longest to develop, as it would have to be developed alongside the code. | 8/10/25 | 14/10/25 |
+| * Read Assessment document<br> * Complete Risk Assessment<br> * Get initial requirements<br> * Interview Customer<br> * Research Architecture | * Start Game Development:<br> * Create player sprite<br> * Create physics system<br> * Create rendering system<br> * Create environment to move around in<br> * Interview customer<br> * Finalise requirements<br> * Start Architecture Document<br> * Continue method selection and planning | * High<br> * High<br> * High<br> * High<br> * High<br> * High<br> * High<br> * Medium | We realised the Architecture document would take the longest to develop, as it would have to be developed alongside the code. | 8/10/25 | 14/10/25 |
 
 ---
 
@@ -58,7 +58,7 @@ These tables show the week-by-week progress of our project. Each entry summarise
 
 | **Tasks Completed** | **Tasks for the Week** | **Task Priorities** | **Task Dependencies** | **Start Date** | **End Date** |
 |----------------------|------------------------|----------------------|------------------------|----------------|---------------|
-| * Interview customer<br> * Finalise requirements<br> * Start Game Development:<br> * Create player sprite<br> * Create physics system<br> * Create rendering system<br> * Create environment to move around in<br> * Start Architecture Document | * Continue Game Development:<br> * Organise Assets folder<br> * Add coffee power-up<br> * Improve movement system<br> * Continue Architecture Document | * High<br> * Medium | To continue the Architecture, there had to be new entities, components, and systems coded in the game to document. | 15/10/25 | 21/10/25 |
+| * Interview customer<br> * Finalise requirements<br> * Start Game Development:<br> * Create player sprite<br> * Create physics system<br> * Create rendering system<br> * Create environment to move around in<br> * Start Architecture Document | * Continue Game Development:<br> * Organise Assets folder<br> * Add coffee power-up<br> * Improve movement system<br> * Continue Architecture Document | * High<br> * Medium<br> * High<br> * Medium<br> * Medium | To continue the Architecture, there had to be new entities, components, and systems coded in the game to document. | 15/10/25 | 21/10/25 |
 
 ---
 
@@ -66,7 +66,7 @@ These tables show the week-by-week progress of our project. Each entry summarise
 
 | **Tasks Completed** | **Tasks for the Week** | **Task Priorities** | **Task Dependencies** | **Start Date** | **End Date** |
 |----------------------|------------------------|----------------------|------------------------|----------------|---------------|
-| * Continue Architecture Document<br> * Continue Game Development:<br> * Add Goose enemy<br> * Make a collider remain after an entity disappears | * Continue Game Development:<br> * Continue implementing coffee<br> * Add Goose enemy<br> * Design University building<br> * Make a collider remain after an entity disappears<br> * Complete Architecture<br> * Complete Methods and Planning<br> * Add documentation to code | * High<br> * High<br> * High<br> * High | To complete methods and planning we needed to know our plans for weeks 5 and 6.<br>Continuing Architecture was dependent on new components and systems being added to the game to document. | 22/10/25 | 28/10/25 |
+| * Continue Architecture Document<br> * Continue Game Development:<br> * Add Goose enemy<br> * Make a collider remain after an entity disappears | * Continue Game Development:<br> * Continue implementing coffee<br> * Add Goose enemy<br> * Design University building<br> * Make a collider remain after an entity disappears<br> * Complete Architecture<br> * Complete Methods and Planning<br> * Add documentation to code | * High<br> * High<br> * High<br> * Medium<br> * High<br> * High<br> * High<br> * High | To complete methods and planning we needed to know our plans for weeks 5 and 6.<br>Continuing Architecture was dependent on new components and systems being added to the game to document. | 22/10/25 | 28/10/25 |
 
 ---
 
@@ -74,7 +74,7 @@ These tables show the week-by-week progress of our project. Each entry summarise
 
 | **Tasks Completed** | **Tasks for the Week** | **Task Priorities** | **Task Dependencies** | **Start Date** | **End Date** |
 |----------------------|------------------------|----------------------|------------------------|----------------|---------------|
-| * Continue Game Development:<br> * Implement coffee<br> * Make a collider remain after an entity disappears | * Proofread deliverables<br> * Complete Architecture<br> * Continue Game Development:<br> * Make Systems able to communicate<br> * Make a game menu<br> * Make the game end when the timer ends<br> * Create messages for when events occur<br> * Stabilise camera<br> * Make game full screen<br> * Make game portable to web<br> * Add music | * Medium<br> * High<br> * High | We continued the Architecture whenever there were developments in the game design to document. | 29/10/25 | 4/11/25 |
+| * Continue Game Development:<br> * Implement coffee<br> * Make a collider remain after an entity disappears | * Proofread deliverables<br> * Complete Architecture<br> * Continue Game Development:<br> * Make Systems able to communicate<br> * Make a game menu<br> * Make the game end when the timer ends<br> * Create messages for when events occur<br> * Stabilise camera<br> * Make game full screen<br> * Make game portable to web<br> * Add music | * Medium<br> * High<br> * High<br> * High<br> * Low<br> * High<br> * High<br> * Medium<br> * Medium<br> * High<br> * Low | We continued the Architecture whenever there were developments in the game design to document. | 29/10/25 | 4/11/25 |
 
 ---
 
@@ -82,7 +82,7 @@ These tables show the week-by-week progress of our project. Each entry summarise
 
 | **Tasks Completed** | **Tasks for the Week** | **Task Priorities** | **Task Dependencies** | **Start Date** | **End Date** |
 |----------------------|------------------------|----------------------|------------------------|----------------|---------------|
-| * Complete Architecture<br>• Proofread deliverables<br> * Continue Game Development:<br> * Add goose enemy<br> * Make Systems able to communicate<br> * Make a game menu<br> * Make the game end when the timer ends<br> * Create messages for when events occur | * Get game ready to submit:<br> * Add score system<br> * Add hidden event<br> * Finalise all deliverables<br> * Submit deliverables and game code<br> * Plan group presentation<br> * Prepare presentation of our project | * High<br> * High<br> * High<br> * Medium | To submit our work, everything had to be ready.<br>We could only start our presentation when our Architecture and Game were close to being ready for submission. | 5/11/25 | 10/11/25 |
+| * Complete Architecture<br> * Proofread deliverables<br> * Continue Game Development:<br> * Add goose enemy<br> * Make Systems able to communicate<br> * Make a game menu<br> * Make the game end when the timer ends<br> * Create messages for when events occur | * Get game ready to submit:<br> * Add score system<br> * Add hidden event<br> * Finalise all deliverables<br> * Submit deliverables and game code<br> * Plan group presentation<br> * Prepare presentation of our project | * High<br> * High<br> * High<br> * High<br> * High<br> * High<br> * Medium | To submit our work, everything had to be ready.<br>We could only start our presentation when our Architecture and Game were close to being ready for submission. | 5/11/25 | 10/11/25 |
 
 ---
 
