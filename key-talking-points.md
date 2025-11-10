@@ -9,7 +9,7 @@ title: Technical Information
 An overview of our team's key contributions to Escape from Uni.
 
 **Codebase Javadoc**
-- <span style="fond-size:1eml">[Javadoc](/javadoc)</span>
+- <span style="font-size:1em">[Javadoc](/javadoc)</span>
 
 
 | Feature | Description | Link |
@@ -23,3 +23,14 @@ An overview of our team's key contributions to Escape from Uni.
 |  **Centralised Asset Management System** | Automatically loads assets and separates file paths from code for easier access and maintenance | [View](/architecture#assets) |
 |  **Fixed Time-Step Engine** | Ensures consistent performance on all devices | [View](/architecture#fixed-time-step-engine) |
 
+## **Technologies and Tools Used**
+
+Our game was developed using:
+- **Language:** Java 17  
+- **Game Framework:** LibGDX  
+- **Architecture:** Custom Entity–Component–System (ECS)  
+- **Physics Engine:** Box2D (via LibGDX)  
+- **Map Editor:** Tiled  
+- **Build System:** Gradle  
+- **Version Control:** Git & GitHub  
+- **Documentation:** Javadoc 

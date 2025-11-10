@@ -29,7 +29,8 @@ This ENG1 Assessment 1 is based on a given scenario: a single-player game where 
 
 - <span style="font-size:1em;">[GitHub Repository](http://example.com)</span>  
 - <span style="font-size:1em;">[Executable JAR](http://example.com)</span>
-- <span style="fond-size:1eml">[Javadoc](/javadoc)</span>
+- <span style="font-size:1em">[Javadoc](/javadoc)</span>
+
 
 ---
 
