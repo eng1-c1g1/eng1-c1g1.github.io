@@ -16,7 +16,7 @@ An overview of our team's key contributions to Escape from Uni.
 Our game was developed using:
 - **Language:** Java 17  
 - **Game Framework:** LibGDX  
-- **Architecture:** Custom Entity-Component-System (ECS)  
+- **Architecture:** Entity-Component-System (ECS)  
 - **Physics Engine:** Box2D (via LibGDX)  
 - **Map Editor:** Tiled  
 - **Build System:** Gradle  

@@ -19,4 +19,4 @@ title: Behaviour Diagram Version History
 
 
 **Behaviour Prototype:**
-<img src="{{ '/assets/images/architecture-behavioural-diagram.png' | relative_url }}" alt="Behaviour Prototype" width="700">
+<img src="{{ '/assets/images/PrototypeArchitectureBehavorialDiagram.png' | relative_url }}" alt="Behaviour Prototype" width="700">

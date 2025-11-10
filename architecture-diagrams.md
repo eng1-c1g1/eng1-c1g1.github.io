@@ -16,7 +16,6 @@ permalink: /architecture-diagrams/
      alt="Structural Diagram" 
      style="width:100%; max-width:1100px; margin:20px 0 50px 0; display:block;">
 
-
 **Class** 
 <br>
 <img src="{{ 'assets/images/architectureClassDiagram.png' | relative_url }}" alt="Class Diagram" style="margin-top:10px;" width="500">
