@@ -16,7 +16,7 @@ An overview of our team's key contributions to Escape from Uni.
 Our game was developed using:
 - **Language:** Java 17  
 - **Game Framework:** LibGDX  
-- **Architecture:** Custom Entity–Component–System (ECS)  
+- **Architecture:** Custom Entity-Component-System (ECS)  
 - **Physics Engine:** Box2D (via LibGDX)  
 - **Map Editor:** Tiled  
 - **Build System:** Gradle  
@@ -40,12 +40,12 @@ Each technical feature was implemented to meet specific functional and architect
 
 | Requirement | Implementation | Related Feature |
 |--------------|----------------|-----------------|
-| **FR_POSITIVE_EVENT** – Game must include a positive event | Coffee collectables increase score | Reusable Player–Entity Interaction System |
-| **FR_NEGATIVE_EVENT** – Game must include a negative event | Goose enemy damages player | Reusable Player–Entity Interaction System |
-| **FR_HIDDEN_EVENT** – Game must include a hidden event | Hidden wall triggered by pressure plate | Interaction System, HiddenWallSystem |
-| **UR_TIMER_5_MIN** – Game must include a timer | Countdown handled by TimerSystem | Fixed Time-Step Engine |
-| **UR_EVENT_COUNTER** – Game must track completed events | EventCounter tracks triggers and progress | Debugging Tools, ECS Modularity |
-| **UR_ECS_ARCHITECTURE** – Game must use an ECS design | Implemented through modular components and systems | Extreme Decoupling, Generalised Rendering |
+| **FR_POSITIVE_EVENT** - Game must include a positive event | Coffee collectables increase score | Reusable Player-Entity Interaction System |
+| **FR_NEGATIVE_EVENT** - Game must include a negative event | Goose enemy damages player | Reusable Player-Entity Interaction System |
+| **FR_HIDDEN_EVENT** - Game must include a hidden event | Hidden wall triggered by pressure plate | Interaction System, HiddenWallSystem |
+| **UR_TIMER_5_MIN** - Game must include a timer | Countdown handled by TimerSystem | Fixed Time-Step Engine |
+| **UR_EVENT_COUNTER** - Game must track completed events | EventCounter tracks triggers and progress | Debugging Tools, ECS Modularity |
+| **UR_ECS_ARCHITECTURE** - Game must use an ECS design | Implemented through modular components and systems | Extreme Decoupling, Generalised Rendering |
 
 ## **Testing and Validation**
 
