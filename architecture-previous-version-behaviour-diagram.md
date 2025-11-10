@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Previous Behaviour Diagrams
+title: Behaviour Diagram Version History
 ---
 
 **Behaviour Version 1:** 
