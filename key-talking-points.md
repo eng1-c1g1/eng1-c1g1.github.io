@@ -36,12 +36,6 @@ Our game was developed using:
 
 ## **Relation to Requirements**
 
-Each technical feature was implemented to meet specific functional and architectural requirements:
-
-| Requirement | Implementation | Related Feature |
-|--------------|----------------|-----------------|
-## **Relation to Requirements**
-
 This section demonstrates how the implemented systems, components, and features satisfy the defined requirements.  
 Each Functional Requirement (FR) is traced to its corresponding User Requirement (UR) and implemented element in the game.
 
