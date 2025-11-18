@@ -3,10 +3,9 @@ title: PlantUML Diagrams
 layout: default
 ---
 
-<details>
+<details markdown="1">
     <summary><strong>Architecture Structural Diagram - show/hide</strong></summary>
 
-        {% raw %}
         ```plantuml
         @startuml architectureStructuralDiagram
 
@@ -172,15 +171,13 @@ layout: default
         HiddenWalls *-- TransformComponent
         @enduml
         ```
-        {% endraw %}
 
 </details>
 
-<details>
+<details markdown="1">
     <summary><strong>Prototype Architecture Behavioural Diagram - show/hide</strong></summary>
 
-        {% raw %}
-        ```puml
+        ```plantuml
         @startuml PrototypeArchitectureBehavorialDiagram
         title __Prototype Activity Diagram__
         start
@@ -205,15 +202,13 @@ layout: default
 
         @enduml
         ```
-        {% endraw %}
 
 </details>
 
-<details>
+<details markdown="1">
     <summary><strong>Architecture Behavioural Diagram - show/hide</strong></summary>
 
-        {% raw %}
-        ```puml
+        ```plantuml
         @startuml "ArchitectureBehavorialDiagram"
 
         title __Behavorial Activity Diagram__
@@ -241,15 +236,13 @@ layout: default
 
         @enduml
         ```
-        {% endraw %}
 
 </details>
 
-<details>
+<details markdown="1">
     <summary><strong>Architecture Class Diagram - show/hide</strong></summary>
 
-        {% raw %}
-        ```puml
+        ```plantuml
         @startuml architectureClassDiagram
 
         title __Game Architecture__
@@ -294,15 +287,13 @@ layout: default
 
         @enduml
         ```
-        {% endraw %}
 
 </details>
 
-<details>
+<details markdown="1">
     <summary><strong>Sequence Diagram - show/hide</strong></summary>
 
-        {% raw %}
-        ```puml
+        ```plantuml
         @startuml
 
         title __Sequence Diagram__
@@ -324,6 +315,5 @@ layout: default
 
         @enduml
         ```
-        {% endraw %}
-        
+
 </details>
