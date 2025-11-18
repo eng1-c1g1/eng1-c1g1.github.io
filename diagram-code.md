@@ -4,316 +4,316 @@ layout: default
 ---
 
 <details markdown="1">
-    <summary><strong>Architecture Structural Diagram - show/hide</strong></summary>
+<summary><strong>Architecture Structural Diagram - show/hide</strong></summary>
 
-        ```plantuml
-        @startuml architectureStructuralDiagram
+```plantuml
+@startuml architectureStructuralDiagram
 
-        title __Structural Diagram__
-
-
-        entity Player{
-            + int id
-        }
-
-        entity Coffee{
-            + int id
-        }
-
-        entity Goose{
-            + int id
-        }
-
-        entity CheckInCode{
-            + int id
-        }
-
-        entity Timer{
-            + int id
-        }
-
-        entity Walls{
-            int id
-        }
-
-        entity HiddenWalls{
-            int id
-        }
-
-        entity PressurePlate{
-            int id
-        }
+title __Structural Diagram__
 
 
-        class CameraFollowComponent{
-            + boolean active
-            + Vector2 offset
-        }
+entity Player{
+    + int id
+}
 
-        class PhysicsComponent{
-            + Body body
-            + enum ColliderType
-            - ColliderType colliderType
-            - float colliderWidth
-            - colliderHeight
-            - float colliderWidth
-            - float colliderHeight
-            - float colliderRadius
-            - Vector2 colliderOffset
-        }
+entity Coffee{
+    + int id
+}
 
-        class PlayerComponent{
-            + final float maxSpeed
-            + List<SpeedBonus> speedBonuses
-            + final float acceleration
-            + final foat deceleration
-            + final float knockbackRecovery
-            + Vector2 currentKnockback
-            + Vector2 naturalVelocity
-            + enum PlayerState
-            + PlayerState currentState
-            
+entity Goose{
+    + int id
+}
 
-        }
+entity CheckInCode{
+    + int id
+}
 
-        class SpriteComponent{
-            + Texture texture
-            + boolean isShown
-            + RenderLayer randerLayer
-            + Vector2 textureOffset
-            + Vector2 size
+entity Timer{
+    + int id
+}
 
-        }
+entity Walls{
+    int id
+}
 
-        class TransformComponent{
-            + Vector2 position
-            + Vector2 scale
-        }
+entity HiddenWalls{
+    int id
+}
 
-        class GooseComponent{
-            + GooseState state
-            + float chaseSpeed
-            + float retreatSpeed
-            + float wanderSpeed
-            + float wanderRadius
-            + float wanderAcceptDistance
-            + Vector2 currentWanderWaypoint
-            + float detectionRadius
-            + float forgetRadius
-            + float retreatTime
-            + float retreatTimeElapsed
-            + Vector2 homePosition
-
-        }
-
-        class InteractableComponent{
-            + InteractableMessage activationMessage
-            + boolean disappearOnInteract
-            + boolean interactionEnabled
-        }
-
-        class TimerComponent{
-            + float timeRemaining
-            + float totalTime
-            + boolean isRunning
-            + boolean hasExpried
-
-        }
-
-        class HiddenWallsComponent{
-            + String triggeredBy
-        }
-
-        class AnimationComponent{
-            + Hash Map<typeOfState, Animation<TextureRegion>> animations
-            + typeOfState currentState
-            + float elapsed
-            + TextureRegion currentFrame
-        }
-
-        class AudioListenerComponent{
-            + Vector2 offet
-        }
+entity PressurePlate{
+    int id
+}
 
 
-        Player *-- PlayerComponent
-        Player *-- PhysicsComponent
-        Player *-- SpriteComponent
-        Player *-- TransformComponent
-        Player *-- CameraFollowComponent
-        Player *-- AnimationComponent
-        Player *-- AudioListenerComponent
+class CameraFollowComponent{
+    + boolean active
+    + Vector2 offset
+}
 
-        Coffee *-- InteractableComponent
-        Coffee *-- TransformComponent
-        Coffee *-- PhysicsComponent
+class PhysicsComponent{
+    + Body body
+    + enum ColliderType
+    - ColliderType colliderType
+    - float colliderWidth
+    - colliderHeight
+    - float colliderWidth
+    - float colliderHeight
+    - float colliderRadius
+    - Vector2 colliderOffset
+}
 
-        Goose *-- InteractableComponent
-        Goose *-- GooseComponent
-        Goose *-- PhysicsComponent
-        Goose *-- TransformComponent
-        Goose *-- AnimationComponent
+class PlayerComponent{
+    + final float maxSpeed
+    + List<SpeedBonus> speedBonuses
+    + final float acceleration
+    + final foat deceleration
+    + final float knockbackRecovery
+    + Vector2 currentKnockback
+    + Vector2 naturalVelocity
+    + enum PlayerState
+    + PlayerState currentState
+    
 
-        Timer *-- TimerComponent
+}
 
-        CheckInCode *-- InteractableComponent
-        CheckInCode *-- TransformComponent
-        CheckInCode *-- PhysicsComponent
+class SpriteComponent{
+    + Texture texture
+    + boolean isShown
+    + RenderLayer randerLayer
+    + Vector2 textureOffset
+    + Vector2 size
 
-        Walls *-- PhysicsComponent
-        Walls *-- TransformComponent
+}
 
-        PressurePlate *-- InteractableComponent
-        PressurePlate *-- TransformComponent
+class TransformComponent{
+    + Vector2 position
+    + Vector2 scale
+}
 
-        HiddenWalls *-- PhysicsComponent
-        HiddenWalls *-- HiddenWallsComponent
-        HiddenWalls *-- TransformComponent
-        @enduml
-        ```
+class GooseComponent{
+    + GooseState state
+    + float chaseSpeed
+    + float retreatSpeed
+    + float wanderSpeed
+    + float wanderRadius
+    + float wanderAcceptDistance
+    + Vector2 currentWanderWaypoint
+    + float detectionRadius
+    + float forgetRadius
+    + float retreatTime
+    + float retreatTimeElapsed
+    + Vector2 homePosition
 
-</details>
+}
 
-<details markdown="1">
-    <summary><strong>Prototype Architecture Behavioural Diagram - show/hide</strong></summary>
+class InteractableComponent{
+    + InteractableMessage activationMessage
+    + boolean disappearOnInteract
+    + boolean interactionEnabled
+}
 
-        ```plantuml
-        @startuml PrototypeArchitectureBehavorialDiagram
-        title __Prototype Activity Diagram__
-        start
+class TimerComponent{
+    + float timeRemaining
+    + float totalTime
+    + boolean isRunning
+    + boolean hasExpried
 
-        repeat
+}
+
+class HiddenWallsComponent{
+    + String triggeredBy
+}
+
+class AnimationComponent{
+    + Hash Map<typeOfState, Animation<TextureRegion>> animations
+    + typeOfState currentState
+    + float elapsed
+    + TextureRegion currentFrame
+}
+
+class AudioListenerComponent{
+    + Vector2 offet
+}
 
 
-        :GameStateSystem: update;
-        :InteractableSystem: update;
-        :GooseSystem: update;
-        :PlayerSystem: update;
-        :PhysicsSyncSystem: update;
-        :PhysicsSystem: update;
-        :PhysicsToTransformSystem: update;
-        :WorldCameraSystem: update;
-        :RenderingSystem: update;
-        :TimerSystem: update;
-        :TimerRendererSystem: update;
+Player *-- PlayerComponent
+Player *-- PhysicsComponent
+Player *-- SpriteComponent
+Player *-- TransformComponent
+Player *-- CameraFollowComponent
+Player *-- AnimationComponent
+Player *-- AudioListenerComponent
 
-        repeat while()
+Coffee *-- InteractableComponent
+Coffee *-- TransformComponent
+Coffee *-- PhysicsComponent
 
+Goose *-- InteractableComponent
+Goose *-- GooseComponent
+Goose *-- PhysicsComponent
+Goose *-- TransformComponent
+Goose *-- AnimationComponent
 
-        @enduml
-        ```
+Timer *-- TimerComponent
+
+CheckInCode *-- InteractableComponent
+CheckInCode *-- TransformComponent
+CheckInCode *-- PhysicsComponent
+
+Walls *-- PhysicsComponent
+Walls *-- TransformComponent
+
+PressurePlate *-- InteractableComponent
+PressurePlate *-- TransformComponent
+
+HiddenWalls *-- PhysicsComponent
+HiddenWalls *-- HiddenWallsComponent
+HiddenWalls *-- TransformComponent
+@enduml
+```
 
 </details>
 
 <details markdown="1">
-    <summary><strong>Architecture Behavioural Diagram - show/hide</strong></summary>
+<summary><strong>Prototype Architecture Behavioural Diagram - show/hide</strong></summary>
 
-        ```plantuml
-        @startuml "ArchitectureBehavorialDiagram"
+```plantuml
+@startuml PrototypeArchitectureBehavorialDiagram
+title __Prototype Activity Diagram__
+start
 
-        title __Behavorial Activity Diagram__
-        start
+repeat
 
-        repeat
 
-        if(fixed update due?) then(yes)
-            :GooseSystem: fixed update;
-            :PlayerSystem: fixed update;
-            :HiddenWallsSystem: fixed update;
-            :PhysicsSyncSystem: fixed update;
-            :PhysicsSystem: fixed update;
-            :PhysicsToTransformSystem: fixed update;
-        else(no)
-            :GameStateSystem: update;
-            :InteractableSystem: update;
-            :PlayerSystem: update;
-            :AudioSystem: update;
-            :WorldCameraSystem: update;
-            :RenderingSystem: update;
-            :TimerSystem: update;
-        endif
-        repeat while()
+:GameStateSystem: update;
+:InteractableSystem: update;
+:GooseSystem: update;
+:PlayerSystem: update;
+:PhysicsSyncSystem: update;
+:PhysicsSystem: update;
+:PhysicsToTransformSystem: update;
+:WorldCameraSystem: update;
+:RenderingSystem: update;
+:TimerSystem: update;
+:TimerRendererSystem: update;
 
-        @enduml
-        ```
+repeat while()
+
+
+@enduml
+```
 
 </details>
 
 <details markdown="1">
-    <summary><strong>Architecture Class Diagram - show/hide</strong></summary>
+<summary><strong>Architecture Behavioural Diagram - show/hide</strong></summary>
 
-        ```plantuml
-        @startuml architectureClassDiagram
+```plantuml
+@startuml "ArchitectureBehavorialDiagram"
 
-        title __Game Architecture__
+title __Behavorial Activity Diagram__
+start
 
-        class Entity{
-            + int id
-            + List<Component> Components
+repeat
 
-        }
+if(fixed update due?) then(yes)
+    :GooseSystem: fixed update;
+    :PlayerSystem: fixed update;
+    :HiddenWallsSystem: fixed update;
+    :PhysicsSyncSystem: fixed update;
+    :PhysicsSystem: fixed update;
+    :PhysicsToTransformSystem: fixed update;
+else(no)
+    :GameStateSystem: update;
+    :InteractableSystem: update;
+    :PlayerSystem: update;
+    :AudioSystem: update;
+    :WorldCameraSystem: update;
+    :RenderingSystem: update;
+    :TimerSystem: update;
+endif
+repeat while()
 
-        class Engine{
-            + List<Entity> entities
-            + List<System> systems
-
-        }
-
-        interface MessageListener{
-            + recieve(message)
-        }
-
-
-        interface Component{
-
-
-        }
-
-        interface System{
-            + update()
-        }
-
-        interface Publisher{
-            + publish(message)
-        }
-
-        System <..> MessageListener : " 0..1"
-        MessageListener <..> Publisher: "1"
-
-        Engine *-- System: "*"
-        Engine *-- Entity: "*"
-        Entity *-- Component: " 1 -- *"
-
-
-        @enduml
-        ```
+@enduml
+```
 
 </details>
 
 <details markdown="1">
-    <summary><strong>Sequence Diagram - show/hide</strong></summary>
+<summary><strong>Architecture Class Diagram - show/hide</strong></summary>
 
-        ```plantuml
-        @startuml
+```plantuml
+@startuml architectureClassDiagram
 
-        title __Sequence Diagram__
+title __Game Architecture__
 
-        participant ConstructListener
-        participant InteractableSystem
-        participant PlayerSystem
-        participant Publisher
+class Entity{
+    + int id
+    + List<Component> Components
 
-        ConstructListener -> Publisher: "Player collided with coffee"
+}
 
-        Publisher -> InteractableSystem: "Player collided with coffee"
+class Engine{
+    + List<Entity> entities
+    + List<System> systems
 
-        InteractableSystem -> Publisher: "Coffee collected"
+}
 
-        Publisher -> PlayerSystem: "Coffee Collected"
+interface MessageListener{
+    + recieve(message)
+}
+
+
+interface Component{
+
+
+}
+
+interface System{
+    + update()
+}
+
+interface Publisher{
+    + publish(message)
+}
+
+System <..> MessageListener : " 0..1"
+MessageListener <..> Publisher: "1"
+
+Engine *-- System: "*"
+Engine *-- Entity: "*"
+Entity *-- Component: " 1 -- *"
+
+
+@enduml
+```
+
+</details>
+
+<details markdown="1">
+<summary><strong>Sequence Diagram - show/hide</strong></summary>
+
+```plantuml
+@startuml
+
+title __Sequence Diagram__
+
+participant ConstructListener
+participant InteractableSystem
+participant PlayerSystem
+participant Publisher
+
+ConstructListener -> Publisher: "Player collided with coffee"
+
+Publisher -> InteractableSystem: "Player collided with coffee"
+
+InteractableSystem -> Publisher: "Coffee collected"
+
+Publisher -> PlayerSystem: "Coffee Collected"
 
 
 
-        @enduml
-        ```
+@enduml
+```
 
 </details>
