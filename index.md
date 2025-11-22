@@ -3,17 +3,17 @@ layout: page
 title: Home Page
 ---
 
-## **Welcome to Cohort 1 Group 11's Website!**
+## **Welcome to Cohort 1 Group 1's Website!**
 
-This website serves to intruduce you to our group project for ENG1 Assessment 1, and provides direction and easy access to our key documents, source code, and other materials.
+This website serves to intruduce you to our group project for ENG1 Assessment 2, and provides direction and easy access to our key documents, source code, and other materials.
 
 ---
 ## **Overview**
-This ENG1 Assessment 1 is based on a given scenario: a single-player game where the player must escape from a maze implemented in Java 17. The implementation should include a 5-minute timer, an event counter, and one negative, one positive, and one hidden event.
+This ENG1 Assessment 2 is based on a given scenario: a single-player game where the player must escape from a maze implemented in Java 17. The implementation should include a 5-minute timer, an event counter, and 5 negative, 3 positive, and 3 hidden events.
 
 ---
 
-##  **PDF Documents for Assessment 1**
+##  **PDF Documents for Assessment 2 -- UPDATE AT END**
 
 | Document Name                  | Link                                |
 |--------------------------------|--------------------------------     |
@@ -25,11 +25,11 @@ This ENG1 Assessment 1 is based on a given scenario: a single-player game where 
 
 ---
 
-## **Source Code & Binaries**
+## **Source Code & Binaries -- UPDATE AT END**
 
-- <span style="font-size:1em;">[GitHub Repository](https://github.com/FreddieUoY/ENG1-project)</span>  
-- <span style="font-size:1em;">[Executable JAR](/assets/Maze11-1.0.0.jar/)</span>
-- <span style="font-size:1em">[Javadoc](/assets/javadoc)</span>
+- <span style="font-size:1em;">[GitHub Repository]()</span>  
+- <span style="font-size:1em;">[Executable JAR]()</span>
+- <span style="font-size:1em">[Javadoc]()</span>
 
 
 ---
