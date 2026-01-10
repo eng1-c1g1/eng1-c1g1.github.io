@@ -13,7 +13,7 @@ This ENG1 Assessment 2 is based on a given scenario: a single-player game where 
 
 ---
 
-##  **PDF Documents for Assessment 2 -- UPDATE AT END**
+##  **PDF Documents for Assessment 1 - FROM GROUP 11**
 
 | Document Name                  | Link                                |
 |--------------------------------|--------------------------------     |
@@ -24,11 +24,31 @@ This ENG1 Assessment 2 is based on a given scenario: a single-player game where 
 | **Risk Assessment & Mitigation**   | <a href="/assets/Risk1.pdf" target="_blank">View</a> |
 
 ---
+##  **PDF Documents for Assessment 1 - UPDATED BY CURRENT TEAM**
+
+| Document Name                  | Link                                |
+|--------------------------------|--------------------------------     |
+| **Requirements**                   | <a href="/assets/Req1_updated.pdf" target="_blank">View</a> |
+
+---
+##  **PDF Documents for Assessment 2 -- FROM CURRENT TEAM**
+
+| Document Name                  | Link                                |
+|--------------------------------|--------------------------------     |
+| **Change Report**                  | <a href="/assets/Arch1.pdf" target="_blank">View</a> |
+| **Implementation**                 | <a href="/assets/Impl1.pdf" target="_blank">View</a> |
+| **Testing**                        | <a href="/assets/Risk1.pdf" target="_blank">View</a> |
+| **User Evaluation**                | <a href="/assets/Risk1.pdf" target="_blank">View</a> |
+| **Continuous Integration**         | <a href="/assets/Risk1.pdf" target="_blank">View</a> |
+
+---
 
 ## **Source Code & Binaries -- UPDATE AT END**
 
 - <span style="font-size:1em;">[GitHub Repository](https://github.com/eng1-c1g1/ENG1-project)</span>  
 - <span style="font-size:1em;">[Executable JAR]()</span>
+
+---
 
 ---
 
