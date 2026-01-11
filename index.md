@@ -29,17 +29,20 @@ This ENG1 Assessment 2 is based on a given scenario: a single-player game where 
 | Document Name                  | Link                                |
 |--------------------------------|--------------------------------     |
 | **Requirements**                   | <a href="/assets/Req1_updated.pdf" target="_blank">View</a> |
+| **Architecture**                   | <a href="/assets/Arch1_updated.pdf" target="_blank">View</a> |
+| **Method and Planning**            | <a href="/assets/Plan1_updated.pdf" target="_blank">View</a> |
+| **Risk Assessment**                |  <a href="/assets/Risk1_updated.pdf" target="_blank">View</a> |
 
 ---
 ##  **PDF Documents for Assessment 2 -- FROM CURRENT TEAM**
 
 | Document Name                  | Link                                |
 |--------------------------------|--------------------------------     |
-| **Change Report**                  | <a href="/assets/Arch1.pdf" target="_blank">View</a> |
-| **Implementation**                 | <a href="/assets/Impl1.pdf" target="_blank">View</a> |
-| **Testing**                        | <a href="/assets/Risk1.pdf" target="_blank">View</a> |
-| **User Evaluation**                | <a href="/assets/Risk1.pdf" target="_blank">View</a> |
-| **Continuous Integration**         | <a href="/assets/Risk1.pdf" target="_blank">View</a> |
+| **Change Report**                  | <a href="/assets/Change2.pdf" target="_blank">View</a> |
+| **Implementation**                 | <a href="/assets/Impl2.pdf" target="_blank">View</a> |
+| **Testing**                        | <a href="/assets/Test2.pdf" target="_blank">View</a> |
+| **User Evaluation**                | <a href="/assets/Eval2.pdf" target="_blank">View</a> |
+| **Continuous Integration**         | <a href="/assets/CI2.pdf" target="_blank">View</a> |
 
 ---
 
@@ -49,6 +52,10 @@ This ENG1 Assessment 2 is based on a given scenario: a single-player game where 
 - <span style="font-size:1em;">[Executable JAR]()</span>
 
 ---
+
+## **Gantt Charts: **##
+
+[See our weekly gantt charts](gantt-charts.md)
 
 ---
 
