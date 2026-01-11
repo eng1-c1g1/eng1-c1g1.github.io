@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="x-ua-compatible" content="IE=edge"/>
+<title>Test results - AchievementTests</title>
+<link href="../css/base-style.css" rel="stylesheet" type="text/css"/>
+<link href="../css/style.css" rel="stylesheet" type="text/css"/>
+<script src="../js/report.js" type="text/javascript"></script>
+</head>
+<body>
+<div id="content">
+<h1>AchievementTests</h1>
+<div class="breadcrumbs">
+<a href="../index.html">all</a> &gt; 
+<a href="../packages/uk.ac.york.cs.eng1.MazeGame.headless.html">uk.ac.york.cs.eng1.MazeGame.headless</a> &gt; AchievementTests</div>
+<div id="summary">
+<table>
+<tr>
+<td>
+<div class="summaryGroup">
+<table>
+<tr>
+<td>
+<div class="infoBox" id="tests">
+<div class="counter">4</div>
+<p>tests</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="failures">
+<div class="counter">0</div>
+<p>failures</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="ignored">
+<div class="counter">0</div>
+<p>ignored</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="duration">
+<div class="counter">1.772s</div>
+<p>duration</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</td>
+<td>
+<div class="infoBox success" id="successRate">
+<div class="percent">100%</div>
+<p>successful</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="tab-container">
+<ul class="tabLinks">
+<li>
+<a href="#">Tests</a>
+</li>
+<li>
+<a href="#">Standard output</a>
+</li>
+<li>
+<a href="#">Standard error</a>
+</li>
+</ul>
+<div class="tab">
+<h2>Tests</h2>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>Duration</th>
+<th>Result</th>
+</tr>
+</thead>
+<tr>
+<td class="success">allEventsAchievementTest()</td>
+<td class="success">0.030s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">allHiddenEventsAchievementTest()</td>
+<td class="success">0.015s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">hiddenPisAchievementTest()</td>
+<td class="success">0.034s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">noAchievementsTest()</td>
+<td class="success">1.693s</td>
+<td class="success">passed</td>
+</tr>
+</table>
+</div>
+<div class="tab">
+<h2>Standard output</h2>
+<span class="code">
+<pre>Maze game launched
+Created Headless configuration
+Achievements file created
+Created Headless configuration
+Maze game launched
+Headless backend successfully launched
+Created Headless configuration
+Headless backend successfully launched
+Maze game launched
+PI_ACTIVATED has count: 1
+achieved Got All 3 Hidden Pis in 1 run
+PRESSURE_PLATE_TRIGGER has count: null
+did not achieve Got All Hidden Events in 1 run
+PRESSURE_PLATE_TRIGGER has count: null
+did not achieve Got All Events in 1 run
+Created Headless configuration
+Headless backend successfully launched
+Maze game launched
+PI_ACTIVATED has count: 1
+achieved Got All 3 Hidden Pis in 1 run
+PRESSURE_PLATE_TRIGGER has count: 1
+LONGBOI_INTERACT has count: 1
+PI_ACTIVATED has count: 1
+achieved Got All Hidden Events in 1 run
+PRESSURE_PLATE_TRIGGER has count: 1
+CHECK_IN_CODE_COLLECT has count: null
+did not achieve Got All Events in 1 run
+Created Headless configuration
+Maze game launched
+Headless backend successfully launched
+GooseBiteMessage
+PlayerSystem.processGooseBite triggered
+PI_ACTIVATED has count: 1
+achieved Got All 3 Hidden Pis in 1 run
+PRESSURE_PLATE_TRIGGER has count: 1
+LONGBOI_INTERACT has count: 1
+PI_ACTIVATED has count: 1
+achieved Got All Hidden Events in 1 run
+PRESSURE_PLATE_TRIGGER has count: 1
+CHECK_IN_CODE_COLLECT has count: 1
+PI_ACTIVATED has count: 1
+COLLECT_COFFEE has count: 1
+ANKH_INTERACT has count: 1
+GOOSE_BITE has count: 1
+TIME_LOST has count: 1
+BULLY_BRIBED has count: 1
+TELEPORTATION has count: 1
+PUDDLE_INTERACT has count: 1
+LONGBOI_INTERACT has count: 1
+achieved Got All Events in 1 run
+</pre>
+</span>
+</div>
+<div class="tab">
+<h2>Standard error</h2>
+<span class="code">
+<pre>Exception in thread &quot;HeadlessApplication&quot; java.lang.NullPointerException: Cannot invoke &quot;com.badlogic.gdx.graphics.GL20.glGenBuffer()&quot; because &quot;com.badlogic.gdx.Gdx.gl20&quot; is null
+	at com.badlogic.gdx.graphics.glutils.VertexBufferObject.&lt;init&gt;(VertexBufferObject.java:67)
+	at com.badlogic.gdx.graphics.Mesh.&lt;init&gt;(Mesh.java:173)
+	at com.badlogic.gdx.graphics.Mesh.&lt;init&gt;(Mesh.java:160)
+	at com.badlogic.gdx.graphics.g2d.SpriteBatch.&lt;init&gt;(SpriteBatch.java:117)
+	at com.badlogic.gdx.graphics.g2d.SpriteBatch.&lt;init&gt;(SpriteBatch.java:88)
+	at io.github.maze11.MazeGame.create(MazeGame.java:38)
+	at com.badlogic.gdx.backends.headless.HeadlessApplication.mainLoop(HeadlessApplication.java:108)
+	at com.badlogic.gdx.backends.headless.HeadlessApplication$1.run(HeadlessApplication.java:93)
+Exception in thread &quot;HeadlessApplication&quot; java.lang.IllegalArgumentException: Error compiling shader: 
+	at com.badlogic.gdx.graphics.g2d.SpriteBatch.createDefaultShader(SpriteBatch.java:183)
+	at com.badlogic.gdx.graphics.g2d.SpriteBatch.&lt;init&gt;(SpriteBatch.java:140)
+	at com.badlogic.gdx.graphics.g2d.SpriteBatch.&lt;init&gt;(SpriteBatch.java:88)
+	at io.github.maze11.MazeGame.create(MazeGame.java:38)
+	at com.badlogic.gdx.backends.headless.HeadlessApplication.mainLoop(HeadlessApplication.java:108)
+	at com.badlogic.gdx.backends.headless.HeadlessApplication$1.run(HeadlessApplication.java:93)
+Exception in thread &quot;HeadlessApplication&quot; java.lang.IllegalArgumentException: Error compiling shader: 
+	at com.badlogic.gdx.graphics.g2d.SpriteBatch.createDefaultShader(SpriteBatch.java:183)
+	at com.badlogic.gdx.graphics.g2d.SpriteBatch.&lt;init&gt;(SpriteBatch.java:140)
+	at com.badlogic.gdx.graphics.g2d.SpriteBatch.&lt;init&gt;(SpriteBatch.java:88)
+	at io.github.maze11.MazeGame.create(MazeGame.java:38)
+	at com.badlogic.gdx.backends.headless.HeadlessApplication.mainLoop(HeadlessApplication.java:108)
+	at com.badlogic.gdx.backends.headless.HeadlessApplication$1.run(HeadlessApplication.java:93)
+Exception in thread &quot;HeadlessApplication&quot; java.lang.IllegalArgumentException: Error compiling shader: 
+	at com.badlogic.gdx.graphics.g2d.SpriteBatch.createDefaultShader(SpriteBatch.java:183)
+	at com.badlogic.gdx.graphics.g2d.SpriteBatch.&lt;init&gt;(SpriteBatch.java:140)
+	at com.badlogic.gdx.graphics.g2d.SpriteBatch.&lt;init&gt;(SpriteBatch.java:88)
+	at io.github.maze11.MazeGame.create(MazeGame.java:38)
+	at com.badlogic.gdx.backends.headless.HeadlessApplication.mainLoop(HeadlessApplication.java:108)
+	at com.badlogic.gdx.backends.headless.HeadlessApplication$1.run(HeadlessApplication.java:93)
+Exception in thread &quot;HeadlessApplication&quot; java.lang.IllegalArgumentException: Error compiling shader: 
+	at com.badlogic.gdx.graphics.g2d.SpriteBatch.createDefaultShader(SpriteBatch.java:183)
+	at com.badlogic.gdx.graphics.g2d.SpriteBatch.&lt;init&gt;(SpriteBatch.java:140)
+	at com.badlogic.gdx.graphics.g2d.SpriteBatch.&lt;init&gt;(SpriteBatch.java:88)
+	at io.github.maze11.MazeGame.create(MazeGame.java:38)
+	at com.badlogic.gdx.backends.headless.HeadlessApplication.mainLoop(HeadlessApplication.java:108)
+	at com.badlogic.gdx.backends.headless.HeadlessApplication$1.run(HeadlessApplication.java:93)
+</pre>
+</span>
+</div>
+</div>
+<div id="footer">
+<p>
+<div>
+<label class="hidden" id="label-for-line-wrapping-toggle" for="line-wrapping-toggle">Wrap lines
+<input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
+</label>
+</div>Generated by 
+<a href="https://www.gradle.org">Gradle 8.14.3</a> at Jan 10, 2026, 4:49:35 PM</p>
+</div>
+</div>
+</body>
+</html>
