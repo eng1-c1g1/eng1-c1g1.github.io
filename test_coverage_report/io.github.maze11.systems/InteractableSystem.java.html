@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>InteractableSystem.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">headless</a> &gt; <a href="index.source.html" class="el_package">io.github.maze11.systems</a> &gt; <span class="el_source">InteractableSystem.java</span></div><h1>InteractableSystem.java</h1><pre class="source lang-java linenums">package io.github.maze11.systems;
+
+import com.badlogic.ashley.core.ComponentMapper;
+import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.EntitySystem;
+import com.badlogic.ashley.core.PooledEngine;
+import io.github.maze11.factory.EntityMaker;
+import io.github.maze11.components.InteractableComponent;
+import io.github.maze11.components.PlayerComponent;
+import io.github.maze11.messages.*;
+
+/**
+ * Manages interactable objects, making them publish messages on collision with
+ * a player.
+ * Interactable objects are objects that cause an effect when they come into
+ * contact with the player.
+ * For example, collectables and geese.
+ */
+public class InteractableSystem extends EntitySystem {
+<span class="fc" id="L20">    ComponentMapper&lt;InteractableComponent&gt; interactableMapper = ComponentMapper.getFor(InteractableComponent.class);</span>
+<span class="fc" id="L21">    ComponentMapper&lt;PlayerComponent&gt; playerMapper = ComponentMapper.getFor(PlayerComponent.class);</span>
+    MessageListener messageListener;
+    PooledEngine engine;
+    EntityMaker entityMaker;
+
+<span class="fc" id="L26">    public InteractableSystem(MessagePublisher messagePublisher, PooledEngine engine, EntityMaker entityMaker) {</span>
+<span class="fc" id="L27">        this.messageListener = new MessageListener(messagePublisher);</span>
+<span class="fc" id="L28">        this.engine = engine;</span>
+<span class="fc" id="L29">        this.entityMaker = entityMaker;</span>
+<span class="fc" id="L30">    }</span>
+
+    @Override
+    public void update(float deltaTime) {
+
+        // CHANGED: Prevent update if game is paused
+<span class="fc bfc" id="L36" title="All 2 branches covered.">        if (!PauseSystem.gamePaused) {</span>
+            // Dequeue all events and process them
+<span class="fc bfc" id="L38" title="All 2 branches covered.">            while (messageListener.hasNext()) {</span>
+<span class="fc" id="L39">                var message = messageListener.next();</span>
+
+                // Not interested in messages that do not represent collisions
+<span class="fc bfc" id="L42" title="All 2 branches covered.">                if (message.type == MessageType.COLLISION) {</span>
+<span class="fc" id="L43">                    var collisionMessage = (CollisionMessage) message;</span>
+
+                    // Determine if the collision is between an interactable and a player
+<span class="fc bfc" id="L46" title="All 4 branches covered.">                    if (interactableMapper.has(collisionMessage.entityA) &amp;&amp; playerMapper.has(collisionMessage.entityB)) {</span>
+<span class="fc" id="L47">                        handleInteraction(collisionMessage.entityB, collisionMessage.entityA);</span>
+<span class="fc bfc" id="L48" title="All 4 branches covered.">                    } else if (playerMapper.has(collisionMessage.entityA) &amp;&amp; interactableMapper.has(collisionMessage.entityB)) {</span>
+<span class="fc" id="L49">                        handleInteraction(collisionMessage.entityA, collisionMessage.entityB);</span>
+                    }
+                    // If not between an interactable and a player, ignore this collision
+                }
+<span class="fc" id="L53">            }</span>
+        }
+<span class="fc" id="L55">    }</span>
+
+    private void handleInteraction(Entity player, Entity interactable) {
+<span class="fc" id="L58">        var interactableComponent = interactableMapper.get(interactable);</span>
+
+<span class="fc bfc" id="L60" title="All 2 branches covered.">        if (!interactableComponent.interactionEnabled) {</span>
+<span class="fc" id="L61">            return;</span>
+        }
+
+        // Sends a message signalling the interaction has occurred
+<span class="fc" id="L65">        InteractableMessage specialisedMessage = (InteractableMessage) interactableComponent.activationMessage.clone();</span>
+<span class="fc" id="L66">        specialisedMessage.specifyInteraction(player, interactable);</span>
+<span class="fc" id="L67">        messageListener.publisher.publish(specialisedMessage);</span>
+
+        // Sends any additional messages that are attached, for example, sound effects
+<span class="fc bfc" id="L70" title="All 2 branches covered.">        for (Message message : interactableComponent.additionalMessages) {</span>
+<span class="fc" id="L71">            messageListener.publisher.publish(message);</span>
+<span class="fc" id="L72">        }</span>
+
+        // Interactions are disabled once it has occurred once, to prevent the
+        // interaction firing multiple times in
+        // quick succession. Can be re-enabled by other systems if necessary
+<span class="fc" id="L77">        interactableComponent.interactionEnabled = false;</span>
+
+<span class="fc bfc" id="L79" title="All 2 branches covered.">        if (interactableComponent.disappearOnInteract) {</span>
+            // Remove the interactable object and all its components
+<span class="fc" id="L81">            engine.removeEntity(interactable);</span>
+        }
+<span class="fc" id="L83">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

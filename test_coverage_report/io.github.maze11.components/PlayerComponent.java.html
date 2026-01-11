@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PlayerComponent.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">headless</a> &gt; <a href="index.source.html" class="el_package">io.github.maze11.components</a> &gt; <span class="el_source">PlayerComponent.java</span></div><h1>PlayerComponent.java</h1><pre class="source lang-java linenums">package io.github.maze11.components;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import com.badlogic.ashley.core.Component;
+import com.badlogic.gdx.math.Vector2;
+
+/**
+ * Represents a player character
+ */
+<span class="fc" id="L12">public class PlayerComponent implements Component {</span>
+    /**
+     * Contains the names of the various animations the player can take
+     */
+<span class="fc" id="L16">    public enum PlayerState {</span>
+<span class="fc" id="L17">        IDLE_UP,</span>
+<span class="fc" id="L18">        IDLE_DOWN,</span>
+<span class="fc" id="L19">        IDLE_LEFT,</span>
+<span class="fc" id="L20">        IDLE_RIGHT,</span>
+<span class="fc" id="L21">        WALK_UP,</span>
+<span class="fc" id="L22">        WALK_DOWN,</span>
+<span class="fc" id="L23">        WALK_LEFT,</span>
+<span class="fc" id="L24">        WALK_RIGHT</span>
+    }
+
+    /**
+     * The current animation of the player
+     */
+<span class="fc" id="L30">    public PlayerState currentState = PlayerState.IDLE_DOWN;</span>
+
+    /** The default maximum speed of the player */
+<span class="fc" id="L33">    public final float maxSpeed = 10f;</span>
+
+    /** Accumulator for any bonuses to speed collected */
+<span class="fc" id="L36">    public List&lt;SpeedBonus&gt; speedBonuses = new ArrayList&lt;&gt;();</span>
+
+    /**
+     * Represents a bonus to speed the player received such as the coffee power-up
+     */
+    public static class SpeedBonus {
+        public float amount;
+        public float timeRemaining;
+
+<span class="fc" id="L45">        public SpeedBonus(float amount, float timeRemaining) {</span>
+<span class="fc" id="L46">            this.amount = amount;</span>
+<span class="fc" id="L47">            this.timeRemaining = timeRemaining;</span>
+<span class="fc" id="L48">        }</span>
+    }
+
+    /** Accumulator for any bonuses to speed collected */
+<span class="fc" id="L52">    public List&lt;InvulnBonus&gt; InvulnBonuses = new ArrayList&lt;&gt;();</span>
+
+    /**
+     * Represents a bonus to speed the player received such as the coffee power-up
+     */
+    public static class InvulnBonus {
+        public float timeRemaining;
+
+<span class="nc" id="L60">        public InvulnBonus(float timeRemaining) {</span>
+<span class="nc" id="L61">            this.timeRemaining = timeRemaining;</span>
+<span class="nc" id="L62">        }</span>
+    }
+
+    /** whether or not player is invulnerable **/
+
+<span class="fc" id="L67">    public boolean isInvulnerable = false;</span>
+
+<span class="fc" id="L69">    public boolean hasBribe = false;</span>
+
+<span class="fc" id="L71">    public final float acceleration = 80f;</span>
+<span class="fc" id="L72">    public final float deceleration = 50f;</span>
+<span class="fc" id="L73">    public final float knockbackRecovery = 25f;</span>
+
+    /** The current knockback velocity the player is experiencing */
+<span class="fc" id="L76">    public Vector2 currentKnockback = new Vector2();</span>
+    /**
+     * The current velocity of the player's natural movement: eg key inputs.
+     * Excludes knockback
+     */
+<span class="fc" id="L81">    public Vector2 naturalVelocity = new Vector2();</span>
+
+    /** The time elapsed since the last footstep sound was played */
+    public float timeSinceLastFootstep;
+    /** The time between two footstep sounds playing */
+<span class="fc" id="L86">    public final float timeBetweenFootsteps = 0.3f;</span>
+    /** */
+<span class="fc" id="L88">    public final float boostFootstepMultiplier = 1.5f;</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

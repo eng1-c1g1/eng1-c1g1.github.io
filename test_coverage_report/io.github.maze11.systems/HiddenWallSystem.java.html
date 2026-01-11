@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>HiddenWallSystem.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">headless</a> &gt; <a href="index.source.html" class="el_package">io.github.maze11.systems</a> &gt; <span class="el_source">HiddenWallSystem.java</span></div><h1>HiddenWallSystem.java</h1><pre class="source lang-java linenums">package io.github.maze11.systems;
+
+import com.badlogic.ashley.core.ComponentMapper;
+import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.Family;
+
+import io.github.maze11.components.HiddenWallComponent;
+import io.github.maze11.fixedStep.FixedStepper;
+import io.github.maze11.fixedStep.IteratingFixedStepSystem;
+import io.github.maze11.messages.MessageListener;
+import io.github.maze11.messages.MessagePublisher;
+import io.github.maze11.messages.MessageType;
+import io.github.maze11.messages.PressurePlateTriggerMessage;
+
+/**
+ * Listens for pressure plates that are pressed, removes hidden walls when a corresponding pressure plate is pressed
+ */
+public class HiddenWallSystem extends IteratingFixedStepSystem {
+
+<span class="fc" id="L20">    private final ComponentMapper&lt;HiddenWallComponent&gt; wallMapper = ComponentMapper.getFor(HiddenWallComponent.class);</span>
+
+    private final MessageListener messageListener;
+
+    public HiddenWallSystem(FixedStepper stepper, MessagePublisher publisher) {
+<span class="fc" id="L25">        super(stepper, Family.all(HiddenWallComponent.class).get());</span>
+<span class="fc" id="L26">        this.messageListener = new MessageListener(publisher);</span>
+<span class="fc" id="L27">    }</span>
+
+    @Override
+    public void fixedUpdate(float deltaTime){
+<span class="fc bfc" id="L31" title="All 2 branches covered.">        while (messageListener.hasNext()) {</span>
+<span class="fc" id="L32">            var message = messageListener.next();</span>
+
+            // Only interested in pressure plate messages
+<span class="fc bfc" id="L35" title="All 2 branches covered.">            if (message.type == MessageType.PRESSURE_PLATE_TRIGGER) {</span>
+<span class="fc" id="L36">                PressurePlateTriggerMessage pressureMessage = (PressurePlateTriggerMessage) message;</span>
+
+                // Looks through the walls, remove any wall that matches
+<span class="fc bfc" id="L39" title="All 2 branches covered.">                for (Entity entity : getEntities()) {</span>
+<span class="fc" id="L40">                    HiddenWallComponent wall = wallMapper.get(entity);</span>
+
+<span class="pc bpc" id="L42" title="1 of 2 branches missed.">                    if (pressureMessage.triggers.equals(wall.triggeredBy)) {</span>
+<span class="fc" id="L43">                        getEngine().removeEntity(entity);</span>
+                    }
+<span class="fc" id="L45">                }</span>
+            }
+<span class="fc" id="L47">        }</span>
+<span class="fc" id="L48">    }</span>
+
+    @Override
+    protected void fixedStepProcessEntity(Entity entity, float deltaTime) {
+        // No actions need to be taken
+<span class="nc" id="L53">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

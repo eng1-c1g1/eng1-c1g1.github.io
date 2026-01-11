@@ -1,0 +1,381 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RenderingSystem.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">headless</a> &gt; <a href="index.source.html" class="el_package">io.github.maze11.systems.rendering</a> &gt; <span class="el_source">RenderingSystem.java</span></div><h1>RenderingSystem.java</h1><pre class="source lang-java linenums">package io.github.maze11.systems.rendering;
+
+import com.badlogic.ashley.core.ComponentMapper;
+import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.Family;
+import com.badlogic.ashley.systems.SortedIteratingSystem;
+import com.badlogic.ashley.utils.ImmutableArray;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
+
+import io.github.maze11.MazeGame;
+import io.github.maze11.assetLoading.AssetId;
+import io.github.maze11.components.AnimationComponent;
+import io.github.maze11.components.SpriteComponent;
+import io.github.maze11.components.TimerComponent;
+import io.github.maze11.components.TransformComponent;
+import io.github.maze11.messages.Message;
+import io.github.maze11.messages.MessageListener;
+import io.github.maze11.messages.MessagePublisher;
+import io.github.maze11.messages.MessageType;
+import io.github.maze11.messages.ToastMessage;
+
+/**
+ * Responsible for rendering everything in the game world onto the screen.
+ * This includes both the tilemap and the entities.
+ * Entities are sorted via their sorting order before they are rendered.
+ */
+public class RenderingSystem extends SortedIteratingSystem {
+
+    private final MazeGame game;
+
+    private final OrthographicCamera worldCamera;
+    private final ScreenViewport uiViewport;
+
+    private final OrthogonalTiledMapRenderer mapRenderer;
+    private final SpriteBatch worldBatch;
+    private final SpriteBatch uiBatch;
+
+    private final ShapeRenderer shapeRenderer;
+
+<span class="nc" id="L53">    private boolean isDebugging = false;</span>
+<span class="nc" id="L54">    private Box2DDebugRenderer debugRenderer = null;</span>
+<span class="nc" id="L55">    private World debugWorld = null;</span>
+<span class="nc" id="L56">    private Texture originTexture = null;</span>
+
+    private final BitmapFont timerFont;
+    private final BitmapFont toastFont;
+
+    private final ComponentMapper&lt;SpriteComponent&gt; spriteM;
+    private final ComponentMapper&lt;TransformComponent&gt; transformM;
+    private final ComponentMapper&lt;AnimationComponent&gt; animM;
+    private final ComponentMapper&lt;TimerComponent&gt; timerM;
+
+    private final MessageListener messageListener;
+
+<span class="nc" id="L68">    private String toastText = null;</span>
+<span class="nc" id="L69">    private float toastTimeRemaining = 0f;</span>
+<span class="nc" id="L70">    private float toastOffsetY = 0f;</span>
+
+    public RenderingSystem(MazeGame game, OrthographicCamera worldCamera, TiledMap map, MessagePublisher publisher) {
+<span class="nc" id="L73">        super(Family.all(SpriteComponent.class, TransformComponent.class).get(), new RenderOrderComparator());</span>
+
+<span class="nc" id="L75">        this.game = game;</span>
+<span class="nc" id="L76">        this.worldCamera = worldCamera;</span>
+
+<span class="nc" id="L78">        this.worldBatch = game.getBatch();</span>
+<span class="nc" id="L79">        this.uiBatch = new SpriteBatch();</span>
+<span class="nc" id="L80">        this.shapeRenderer = new ShapeRenderer();</span>
+
+<span class="nc" id="L82">        this.uiViewport = new ScreenViewport();</span>
+
+<span class="nc" id="L84">        float unitScale = 1f / 32f;</span>
+<span class="nc" id="L85">        this.mapRenderer = new OrthogonalTiledMapRenderer(map, unitScale, worldBatch);</span>
+
+<span class="nc" id="L87">        this.timerFont = new BitmapFont();</span>
+<span class="nc" id="L88">        timerFont.setUseIntegerPositions(false);</span>
+<span class="nc" id="L89">        timerFont.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);</span>
+
+<span class="nc" id="L91">        this.toastFont = new BitmapFont();</span>
+<span class="nc" id="L92">        toastFont.setUseIntegerPositions(false);</span>
+<span class="nc" id="L93">        toastFont.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);</span>
+
+<span class="nc" id="L95">        spriteM = ComponentMapper.getFor(SpriteComponent.class);</span>
+<span class="nc" id="L96">        transformM = ComponentMapper.getFor(TransformComponent.class);</span>
+<span class="nc" id="L97">        animM = ComponentMapper.getFor(AnimationComponent.class);</span>
+<span class="nc" id="L98">        timerM = ComponentMapper.getFor(TimerComponent.class);</span>
+
+<span class="nc" id="L100">        this.messageListener = new MessageListener(publisher);</span>
+<span class="nc" id="L101">    }</span>
+
+    /**
+     * When this is enabled, displays additional visuals to help with debugging.
+     * This shows where the origins of each visible objects are and shows colliders
+     * for physics entities
+     * 
+     * @param debugWorld The physics world to display colliders for
+     */
+    public void enableDebugging(World debugWorld) {
+<span class="nc" id="L111">        this.isDebugging = true;</span>
+<span class="nc" id="L112">        this.debugRenderer = new Box2DDebugRenderer();</span>
+<span class="nc" id="L113">        this.debugWorld = debugWorld;</span>
+<span class="nc" id="L114">        this.originTexture = game.getAssetLoader().get(AssetId.ORIGIN_INDICATOR, Texture.class);</span>
+<span class="nc" id="L115">    }</span>
+
+    @Override
+    public void update(float deltaTime) {
+<span class="nc" id="L119">        consumeMessages(deltaTime);</span>
+
+<span class="nc" id="L121">        forceSort();</span>
+
+<span class="nc" id="L123">        worldCamera.update();</span>
+<span class="nc" id="L124">        mapRenderer.setView(worldCamera);</span>
+
+        // Background
+<span class="nc" id="L127">        mapRenderer.render(new int[] { 0 });</span>
+
+        // World entities
+<span class="nc" id="L130">        worldBatch.setProjectionMatrix(worldCamera.combined);</span>
+<span class="nc" id="L131">        worldBatch.begin();</span>
+<span class="nc" id="L132">        super.update(deltaTime);</span>
+<span class="nc" id="L133">        worldBatch.end();</span>
+
+        // Foreground
+<span class="nc" id="L136">        mapRenderer.render(new int[] { 1 });</span>
+
+        // Debug
+<span class="nc bnc" id="L139" title="All 2 branches missed.">        if (isDebugging) {</span>
+<span class="nc" id="L140">            debugRenderer.render(this.debugWorld, worldCamera.combined);</span>
+        }
+
+        // UI
+<span class="nc" id="L144">        renderUI();</span>
+<span class="nc" id="L145">    }</span>
+
+    /**
+     * Process all the new messages it receives
+     */
+    private void consumeMessages(float deltaTime) {
+<span class="nc bnc" id="L151" title="All 2 branches missed.">        while (messageListener.hasNext()) {</span>
+<span class="nc" id="L152">            Message m = messageListener.next();</span>
+<span class="nc bnc" id="L153" title="All 2 branches missed.">            if (m.type == MessageType.TOAST_SHOW) {</span>
+<span class="nc" id="L154">                ToastMessage t = (ToastMessage) m;</span>
+<span class="nc" id="L155">                toastText = t.text;</span>
+<span class="nc" id="L156">                toastTimeRemaining = t.duration;</span>
+
+<span class="nc" id="L158">                toastOffsetY = 20f;</span>
+            }
+<span class="nc" id="L160">        }</span>
+
+<span class="nc bnc" id="L162" title="All 2 branches missed.">        if (toastTimeRemaining &gt; 0f) {</span>
+<span class="nc" id="L163">            toastTimeRemaining -= deltaTime;</span>
+
+<span class="nc" id="L165">            toastOffsetY *= 0.92f;</span>
+
+<span class="nc bnc" id="L167" title="All 2 branches missed.">            if (toastTimeRemaining &lt; 0f)</span>
+<span class="nc" id="L168">                toastTimeRemaining = 0f;</span>
+        }
+<span class="nc" id="L170">    }</span>
+
+    @Override
+    protected void processEntity(Entity entity, float deltaTime) {
+<span class="nc" id="L174">        SpriteComponent sprite = spriteM.get(entity);</span>
+<span class="nc" id="L175">        TransformComponent transform = transformM.get(entity);</span>
+<span class="nc bnc" id="L176" title="All 2 branches missed.">        if (!sprite.isShown)</span>
+<span class="nc" id="L177">            return;</span>
+
+        TextureRegion region;
+<span class="nc" id="L180">        AnimationComponent anim = animM.get(entity);</span>
+<span class="nc bnc" id="L181" title="All 4 branches missed.">        if (anim != null &amp;&amp; anim.currentFrame != null) {</span>
+<span class="nc" id="L182">            region = anim.currentFrame;</span>
+        } else {
+<span class="nc" id="L184">            region = new TextureRegion(sprite.texture);</span>
+        }
+
+<span class="nc" id="L187">        float width = sprite.size.x * transform.scale.x;</span>
+<span class="nc" id="L188">        float height = sprite.size.y * transform.scale.y;</span>
+<span class="nc" id="L189">        float xOffset = -0.5f * width;</span>
+
+<span class="nc" id="L191">        worldBatch.draw(</span>
+                region,
+                transform.position.x + sprite.textureOffset.x + xOffset,
+                transform.position.y + sprite.textureOffset.y,
+                width,
+                height);
+
+<span class="nc bnc" id="L198" title="All 2 branches missed.">        if (isDebugging)</span>
+<span class="nc" id="L199">            worldBatch.draw(originTexture, transform.position.x - 0.5f, transform.position.y - 0.5f, 1f, 1f);</span>
+<span class="nc" id="L200">    }</span>
+
+    /**
+     * UI refers to the overlay of anything that does not exist in the game world
+     * but should be rendered.
+     * Renders the timer and toasts.
+     */
+    private void renderUI() {
+<span class="nc" id="L208">        uiViewport.apply();</span>
+<span class="nc" id="L209">        shapeRenderer.setProjectionMatrix(uiViewport.getCamera().combined);</span>
+<span class="nc" id="L210">        uiBatch.setProjectionMatrix(uiViewport.getCamera().combined);</span>
+
+<span class="nc" id="L212">        ImmutableArray&lt;Entity&gt; timers = getEngine().getEntitiesFor(Family.all(TimerComponent.class).get());</span>
+<span class="nc bnc" id="L213" title="All 2 branches missed.">        if (timers.size() == 0)</span>
+<span class="nc" id="L214">            return;</span>
+
+<span class="nc" id="L216">        Entity timerEntity = timers.first();</span>
+<span class="nc" id="L217">        TimerComponent timer = timerM.get(timerEntity);</span>
+
+<span class="nc" id="L219">        float w = uiViewport.getWorldWidth();</span>
+<span class="nc" id="L220">        float h = uiViewport.getWorldHeight();</span>
+
+<span class="nc" id="L222">        float centerX = w * 0.5f;</span>
+<span class="nc" id="L223">        float centerY = h - 60f;</span>
+<span class="nc" id="L224">        float radius = 50f;</span>
+
+<span class="nc" id="L226">        float progress = timer.timeRemaining / timer.totalTime;</span>
+<span class="nc" id="L227">        Color barColor = getTimerColor(progress);</span>
+
+        // Timer background
+<span class="nc" id="L230">        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);</span>
+<span class="nc" id="L231">        shapeRenderer.setColor(0.2f, 0.2f, 0.2f, 0.7f);</span>
+<span class="nc" id="L232">        shapeRenderer.circle(centerX, centerY, radius);</span>
+<span class="nc" id="L233">        shapeRenderer.end();</span>
+
+<span class="nc" id="L235">        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);</span>
+<span class="nc" id="L236">        shapeRenderer.setColor(barColor);</span>
+<span class="nc" id="L237">        float arcAngle = progress * 360f;</span>
+<span class="nc" id="L238">        shapeRenderer.arc(centerX, centerY, radius - 5f, 90f, arcAngle, 30);</span>
+<span class="nc" id="L239">        shapeRenderer.end();</span>
+
+        // Timer ring
+<span class="nc" id="L242">        Gdx.gl.glLineWidth(3);</span>
+<span class="nc" id="L243">        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);</span>
+<span class="nc" id="L244">        shapeRenderer.setColor(0.5f, 0.5f, 0.5f, 1f);</span>
+<span class="nc" id="L245">        shapeRenderer.circle(centerX, centerY, radius);</span>
+<span class="nc" id="L246">        shapeRenderer.end();</span>
+<span class="nc" id="L247">        Gdx.gl.glLineWidth(1);</span>
+
+<span class="nc" id="L249">        drawToastBackground();</span>
+
+        // Scale fonts relative to current viewport
+<span class="nc" id="L252">        timerFont.getData().setScale(2f * h / Gdx.graphics.getHeight());</span>
+<span class="nc" id="L253">        toastFont.getData().setScale(2f * h / Gdx.graphics.getHeight());</span>
+
+<span class="nc" id="L255">        uiBatch.begin();</span>
+
+        // Timer text
+<span class="nc" id="L258">        int minutes = (int) (timer.timeRemaining / 60);</span>
+<span class="nc" id="L259">        int seconds = (int) (timer.timeRemaining % 60);</span>
+<span class="nc" id="L260">        String timeText = String.format(&quot;%02d:%02d&quot;, minutes, seconds);</span>
+<span class="nc" id="L261">        GlyphLayout timeLayout = new GlyphLayout(timerFont, timeText);</span>
+<span class="nc" id="L262">        timerFont.draw(uiBatch, timeLayout, centerX - timeLayout.width * 0.5f, centerY + timeLayout.height * 0.5f);</span>
+
+<span class="nc" id="L264">        drawToastText();</span>
+
+<span class="nc" id="L266">        uiBatch.end();</span>
+<span class="nc" id="L267">    }</span>
+
+    // ---------- Toast helpers ----------
+
+    /**
+     * Draws a panel to go behind any toasts
+     */
+    private void drawToastBackground() {
+<span class="nc bnc" id="L275" title="All 4 branches missed.">        if (toastTimeRemaining &lt;= 0f || toastText == null)</span>
+<span class="nc" id="L276">            return;</span>
+
+<span class="nc bnc" id="L278" title="All 2 branches missed.">        float alpha = (toastTimeRemaining &gt; 0.3f) ? 1f : (toastTimeRemaining / 0.3f);</span>
+
+<span class="nc" id="L280">        float w = uiViewport.getWorldWidth();</span>
+<span class="nc" id="L281">        float h = uiViewport.getWorldHeight();</span>
+
+<span class="nc" id="L283">        GlyphLayout layout = new GlyphLayout(toastFont, toastText);</span>
+
+<span class="nc" id="L285">        float x = (w - layout.width) * 0.5f;</span>
+<span class="nc" id="L286">        float y = h - 140f - toastOffsetY;</span>
+
+<span class="nc" id="L288">        float padding = 28f;</span>
+<span class="nc" id="L289">        float bgWidth = layout.width + padding * 2f;</span>
+<span class="nc" id="L290">        float bgHeight = layout.height + padding * 1.5f;</span>
+
+        // Rounded capsule radius
+<span class="nc" id="L293">        float radius = bgHeight * 0.5f;</span>
+
+<span class="nc" id="L295">        float bgX = x - padding;</span>
+<span class="nc" id="L296">        float bgY = y - layout.height - padding * 0.75f;</span>
+
+        // Background color
+<span class="nc" id="L299">        float r = 0.1f, g = 0.1f, b = 0.1f, a = 0.85f * alpha;</span>
+
+<span class="nc" id="L301">        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);</span>
+<span class="nc" id="L302">        shapeRenderer.setColor(r, g, b, a);</span>
+
+        // Center rectangle
+<span class="nc" id="L305">        shapeRenderer.rect(</span>
+                bgX + radius,
+                bgY,
+                bgWidth - 2 * radius,
+                bgHeight);
+
+        // Left cap
+<span class="nc" id="L312">        shapeRenderer.arc(</span>
+                bgX + radius,
+                bgY + radius,
+                radius,
+                90,
+                180);
+
+        // Right cap
+<span class="nc" id="L320">        shapeRenderer.arc(</span>
+                bgX + bgWidth - radius,
+                bgY + radius,
+                radius,
+                270,
+                180);
+
+<span class="nc" id="L327">        shapeRenderer.end();</span>
+<span class="nc" id="L328">    }</span>
+
+    /**
+     * Displays the text of the &quot;toast&quot;, displaying information about the state of
+     * the game to the player
+     */
+    private void drawToastText() {
+<span class="nc bnc" id="L335" title="All 4 branches missed.">        if (toastTimeRemaining &lt;= 0f || toastText == null)</span>
+<span class="nc" id="L336">            return;</span>
+
+<span class="nc bnc" id="L338" title="All 2 branches missed.">        float alpha = (toastTimeRemaining &gt; 0.3f) ? 1f : (toastTimeRemaining / 0.3f);</span>
+
+<span class="nc" id="L340">        float w = uiViewport.getWorldWidth();</span>
+<span class="nc" id="L341">        float h = uiViewport.getWorldHeight();</span>
+
+<span class="nc" id="L343">        GlyphLayout layout = new GlyphLayout(toastFont, toastText);</span>
+
+<span class="nc" id="L345">        float x = (w - layout.width) * 0.5f;</span>
+<span class="nc" id="L346">        float y = h - 140f - toastOffsetY;</span>
+
+        // Shadow
+<span class="nc" id="L349">        toastFont.setColor(0f, 0f, 0f, 0.5f * alpha);</span>
+<span class="nc" id="L350">        toastFont.draw(uiBatch, layout, x + 2f, y - 2f);</span>
+
+        // Text
+<span class="nc" id="L353">        toastFont.setColor(1f, 1f, 0.9f, alpha);</span>
+<span class="nc" id="L354">        toastFont.draw(uiBatch, layout, x, y);</span>
+<span class="nc" id="L355">    }</span>
+
+    private Color getTimerColor(float progress) {
+<span class="nc" id="L358">        Color green = new Color(0.2f, 0.8f, 0.2f, 1f);</span>
+<span class="nc" id="L359">        Color yellow = new Color(1f, 0.8f, 0f, 1f);</span>
+<span class="nc" id="L360">        Color red = new Color(1f, 0.2f, 0.2f, 1f);</span>
+
+<span class="nc bnc" id="L362" title="All 2 branches missed.">        if (progress &gt; 0.5f) {</span>
+<span class="nc" id="L363">            float t = (progress - 0.5f) / 0.5f;</span>
+<span class="nc" id="L364">            return green.cpy().lerp(yellow, 1f - t);</span>
+        } else {
+<span class="nc" id="L366">            float t = progress / 0.5f;</span>
+<span class="nc" id="L367">            return yellow.cpy().lerp(red, 1f - t);</span>
+        }
+    }
+
+    public void resize(int width, int height) {
+<span class="nc" id="L372">        uiViewport.update(width, height, true);</span>
+<span class="nc" id="L373">    }</span>
+
+    public void dispose() {
+<span class="nc bnc" id="L376" title="All 2 branches missed.">        if (isDebugging) {</span>
+<span class="nc" id="L377">            debugRenderer.dispose();</span>
+        }
+<span class="nc" id="L379">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

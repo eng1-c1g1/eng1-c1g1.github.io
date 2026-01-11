@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>EventCounter.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">headless</a> &gt; <a href="index.source.html" class="el_package">io.github.maze11.systems.gameState</a> &gt; <span class="el_source">EventCounter.java</span></div><h1>EventCounter.java</h1><pre class="source lang-java linenums">package io.github.maze11.systems.gameState;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import static java.util.Map.entry;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
+
+import io.github.maze11.messages.MessageType;
+
+
+
+/**
+ * Keeps count of the number of events and can output a score summary
+ */
+<span class="fc" id="L20">public class EventCounter {</span>
+    // CHANGED: Added messages for new events
+    /** Stores the event types this records, along with their effect on score and message to show in the win screen*/
+<span class="fc" id="L23">    private final Map&lt;MessageType, MessageData&gt; messageMappings = Map.ofEntries(</span>
+<span class="fc" id="L24">        entry(MessageType.COLLECT_COFFEE, new MessageData(&quot;Coffees Collected&quot;, 10, Type.POSITIVE)),</span>
+<span class="fc" id="L25">        entry(MessageType.PUDDLE_INTERACT, new MessageData(&quot;Slipped in puddle&quot;, -10, Type.NEGATIVE)),</span>
+<span class="fc" id="L26">        entry(MessageType.CHECK_IN_CODE_COLLECT, new MessageData(&quot;Check-in codes collected&quot;, 20, Type.POSITIVE)),</span>
+<span class="fc" id="L27">        entry(MessageType.TIME_LOST, new MessageData(&quot;Homeboys Yapped With&quot;, -20, Type.NEGATIVE)),</span>
+<span class="fc" id="L28">        entry(MessageType.GOOSE_BITE, new MessageData(&quot;Goose Bites&quot;, -10, Type.NEGATIVE)),</span>
+<span class="fc" id="L29">        entry(MessageType.PI_ACTIVATED, new MessageData(&quot;All Pi's Activated&quot;, 100, Type.HIDDEN)),</span>
+<span class="fc" id="L30">        entry(MessageType.ANKH_INTERACT, new MessageData(&quot;Ankh Activated&quot;, 0, Type.POSITIVE)),</span>
+<span class="fc" id="L31">        entry(MessageType.BULLY_BRIBED, new MessageData(&quot;Bully bribed&quot;, 0, Type.NEGATIVE)),</span>
+<span class="fc" id="L32">        entry(MessageType.LONGBOI_INTERACT, new MessageData(&quot;Long Boi found&quot;, 50, Type.HIDDEN)),</span>
+<span class="fc" id="L33">        entry(MessageType.PRESSURE_PLATE_TRIGGER, new MessageData(&quot;Hidden Room Unlocked&quot;, 0, Type.HIDDEN)),</span>
+<span class="fc" id="L34">        entry(MessageType.TELEPORTATION, new MessageData(&quot;Teleported backwards&quot;, -10, Type.NEGATIVE))</span>
+    );
+    
+<span class="fc" id="L37">    private final Map&lt;MessageType, Integer&gt; recordedCounts = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L38">    private final int scorePerLeftoverSecond = 1;</span>
+<span class="fc" id="L39">    private final int completionBonus = 100;</span>
+
+    /** Records that a new instance of this message was registered in the EventCounter */
+    public void receiveMessage(MessageType messageType) {
+        // Check if this is a message this class is supposed to track
+<span class="fc bfc" id="L44" title="All 2 branches covered.">        if (messageMappings.containsKey(messageType)) {</span>
+            // Increment the number of events of this type received by 1
+<span class="pc bpc" id="L46" title="1 of 2 branches missed.">            if (recordedCounts.containsKey(messageType)) {</span>
+<span class="nc" id="L47">                recordedCounts.put(messageType, recordedCounts.get(messageType) + 1);</span>
+            }
+            else {
+<span class="fc" id="L50">                recordedCounts.put(messageType, 1);</span>
+            }
+        }
+<span class="fc" id="L53">    }</span>
+
+    /**
+     * Generates the player score and a breakdown of how it was obtained
+     * @param mazeExited Whether or not the player has reached the exit
+     * @param secondsRemaining The seconds remaining on the timer at this point
+     * @return A ScoreCard which contains the score and a breakdown of it
+     */
+    public ScoreCard makeScoreCard(boolean mazeExited, int secondsRemaining) {
+<span class="fc" id="L62">        List&lt;String&gt; breakdown = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L63">        int totalScore = 0;</span>
+
+        // CHANGED: Changed the score breakdown to tell you how many positive, negative and hidden events were triggered.
+        // Calculate score from each of the tracked events
+<span class="fc" id="L67">        int positiveEventCount = 0;</span>
+<span class="fc" id="L68">        int negativeEventCount = 0;</span>
+<span class="fc" id="L69">        int hiddenEventCount = 0;</span>
+<span class="fc" id="L70">        int posScoreContribution = 0;</span>
+<span class="fc" id="L71">        int negScoreContribution = 0;</span>
+<span class="fc" id="L72">        int hiddenScoreContribution = 0;</span>
+<span class="fc bfc" id="L73" title="All 2 branches covered.">        for (var term : messageMappings.entrySet()) {</span>
+            // Get the number of events of this type collected. If no term, none of this event have been collected
+<span class="fc" id="L75">            int occurrences = recordedCounts.getOrDefault(term.getKey(), 0);</span>
+<span class="fc" id="L76">            MessageData data = term.getValue();</span>
+
+<span class="fc" id="L78">            int scoreContribution = data.scoreBonus * occurrences;</span>
+
+<span class="fc bfc" id="L80" title="All 2 branches covered.">            if (data.eventType == Type.POSITIVE) {</span>
+<span class="fc" id="L81">                posScoreContribution += scoreContribution;</span>
+<span class="fc" id="L82">                positiveEventCount += occurrences;</span>
+<span class="fc bfc" id="L83" title="All 2 branches covered.">            } else if (data.eventType == Type.NEGATIVE) {</span>
+<span class="fc" id="L84">                negScoreContribution += scoreContribution;</span>
+<span class="fc" id="L85">                negativeEventCount += occurrences;</span>
+            } else {
+<span class="fc" id="L87">                hiddenScoreContribution += scoreContribution;</span>
+<span class="fc" id="L88">                hiddenEventCount += occurrences;</span>
+            }
+
+<span class="fc" id="L91">            totalScore += scoreContribution;</span>
+
+<span class="fc" id="L93">        }</span>
+<span class="fc" id="L94">        breakdown.add(positiveEventCount + &quot; Positive Events: &quot; + formatBonus(posScoreContribution));</span>
+<span class="fc" id="L95">        breakdown.add(negativeEventCount + &quot; Negative Events: &quot; + formatBonus(negScoreContribution));</span>
+<span class="fc" id="L96">        breakdown.add(hiddenEventCount + &quot; Hidden Events: &quot; + formatBonus(hiddenScoreContribution));</span>
+
+        // Time left over and completion bonus is only available if the player has left the maze
+<span class="pc bpc" id="L99" title="1 of 2 branches missed.">        if (mazeExited) {</span>
+            // Add score for left over time
+<span class="nc" id="L101">            int scoreContribution = scorePerLeftoverSecond * secondsRemaining;</span>
+<span class="nc" id="L102">            totalScore += scoreContribution;</span>
+<span class="nc" id="L103">            breakdown.add(&quot;Time remaining bonus: &quot; + formatBonus(scoreContribution));</span>
+<span class="nc" id="L104">            totalScore += completionBonus;</span>
+<span class="nc" id="L105">            breakdown.add(&quot;Escape bonus: &quot; + formatBonus(completionBonus));</span>
+
+	    // end of the game - now have how many events happened total - update achievements using it:
+<span class="nc" id="L108">	    updateAchievements();</span>
+        }
+
+<span class="fc" id="L111">        return new ScoreCard(totalScore, breakdown);</span>
+    }
+
+    // CHANGED - added Achievement class to encapsulate achievement functionality
+    public class Achievement {
+            // maps events : number of times they need to occur to get the achievement
+            private Map&lt;MessageType, Integer&gt; eventRequirements;
+            private String name;
+
+<span class="fc" id="L120">            public Achievement(String givenName, Map&lt;MessageType, Integer&gt; givenMapping) {</span>
+                // set Map based on mapping passed:
+<span class="fc" id="L122">                name = givenName;</span>
+<span class="fc" id="L123">                eventRequirements = givenMapping;</span>
+<span class="fc" id="L124">            }</span>
+            
+            public boolean checkEventsAchieve(Map&lt;MessageType, Integer&gt; EventCounts) {
+                // check if given EventCounts qualifies for this achievement:
+<span class="fc bfc" id="L128" title="All 2 branches covered.">                for (var event : eventRequirements.keySet()) {</span>
+                    // debug:
+<span class="fc" id="L130">                    String out = String.format(&quot;%s has count: %d&quot;, event, EventCounts.get(event));</span>
+<span class="fc" id="L131">                    System.out.println(out);</span>
+                    // check if invalid
+<span class="fc bfc" id="L133" title="All 2 branches covered.">                    if (EventCounts.get(event) == null) {</span>
+<span class="fc" id="L134">                        return false;</span>
+
+<span class="pc bpc" id="L136" title="1 of 2 branches missed.">                    } else if (EventCounts.get(event) &lt; eventRequirements.get(event)) {</span>
+<span class="nc" id="L137">                        return false;</span>
+                    }
+<span class="fc" id="L139">                }</span>
+                // no issues found, true by default:
+<span class="fc" id="L141">                return true;</span>
+            }
+
+            public String getName() {
+<span class="fc" id="L145">                return name;</span>
+            }
+    }
+
+
+    // CHANGED - added method to update achievements, called at end of game
+    public void updateAchievements() {
+            // -- ACHIEVEMENTS INITIALISED HERE --:
+<span class="fc" id="L153">            List&lt;Achievement&gt; allAchievements = new ArrayList&lt;Achievement&gt;();</span>
+            // define achievements here
+            // All hidden Pis
+<span class="fc" id="L156">            allAchievements.add(new Achievement(&quot;Got All 3 Hidden Pis in 1 run&quot;, Map.ofEntries(entry(MessageType.PI_ACTIVATED, 1))));</span>
+            // All hidden events:
+<span class="fc" id="L158">            allAchievements.add(new Achievement(&quot;Got All Hidden Events in 1 run&quot;, Map.ofEntries(</span>
+<span class="fc" id="L159">                entry(MessageType.PI_ACTIVATED, 1),</span>
+<span class="fc" id="L160">                entry(MessageType.LONGBOI_INTERACT, 1),</span>
+<span class="fc" id="L161">                entry(MessageType.PRESSURE_PLATE_TRIGGER, 1))));</span>
+
+            // All Events:
+<span class="fc" id="L164">            Map&lt;MessageType, Integer&gt; reqMapping = new HashMap();</span>
+            // add each event to our requiremens mapping:
+            
+<span class="fc bfc" id="L167" title="All 2 branches covered.">            for (MessageType msgType : messageMappings.keySet()) {</span>
+<span class="fc" id="L168">                reqMapping.put(msgType, 1);</span>
+<span class="fc" id="L169">            }</span>
+            
+<span class="fc" id="L171">            allAchievements.add(new Achievement(&quot;Got All Events in 1 run&quot;, reqMapping));</span>
+
+            // load preferences:
+<span class="fc" id="L174">            Preferences prefs = Gdx.app.getPreferences(&quot;Achievements&quot;);</span>
+
+            // iterate through each achievement, check which we achieved this run:
+<span class="fc bfc" id="L177" title="All 2 branches covered.">            for (var achieve : allAchievements){</span>
+                // check if achieved them in this run:
+<span class="fc bfc" id="L179" title="All 2 branches covered.">                if (achieve.checkEventsAchieve(recordedCounts)) {</span>
+                    // if achieved, just print to console that we did for now:
+<span class="fc" id="L181">                    System.out.println(&quot;achieved &quot; + achieve.getName());</span>
+                    
+                    // save to preferences:
+<span class="fc" id="L184">                    prefs.putBoolean(achieve.getName(), true);</span>
+                } else {
+<span class="fc" id="L186">                    System.out.println(&quot;did not achieve &quot; + achieve.getName());</span>
+                }
+<span class="fc" id="L188">            }</span>
+            // save preferences so they persist:
+<span class="fc" id="L190">            prefs.flush();</span>
+<span class="fc" id="L191">    }</span>
+
+    public List&lt;String&gt; getAllAchievements() {
+        // get all keys from prefs file w/ value that isn't 0:
+<span class="fc" id="L195">        List&lt;String&gt; achievementsGot = new ArrayList&lt;&gt;();</span>
+        // load preferences:
+<span class="fc" id="L197">        Preferences prefs = Gdx.app.getPreferences(&quot;Achievements&quot;);</span>
+        // get all achievements w/ value = true
+<span class="pc bpc" id="L199" title="1 of 2 branches missed.">        for (var achvName: prefs.get().keySet()) {</span>
+<span class="nc bnc" id="L200" title="All 2 branches missed.">            if (prefs.getBoolean(achvName) == true) {</span>
+<span class="nc" id="L201">                achievementsGot.add(achvName);</span>
+            }
+<span class="nc" id="L203">        }</span>
+    
+<span class="fc" id="L205">        return achievementsGot;</span>
+    }
+
+    private String formatBonus(int bonus) {
+        // Add a + to the displayed contribution if it is positive or 0
+<span class="fc bfc" id="L210" title="All 2 branches covered.">        return bonus &gt; 0 ? &quot;+&quot; + bonus : bonus + &quot;&quot;;</span>
+    }
+
+<span class="fc" id="L213">    private record MessageData(String name, int scoreBonus, Type eventType){ }</span>
+
+<span class="fc" id="L215">    enum Type {</span>
+<span class="fc" id="L216">        POSITIVE,</span>
+<span class="fc" id="L217">        NEGATIVE,</span>
+<span class="fc" id="L218">        HIDDEN</span>
+    }
+}
+
+ 
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

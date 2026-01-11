@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PhysicsSyncSystem.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">headless</a> &gt; <a href="index.source.html" class="el_package">io.github.maze11.systems.physics</a> &gt; <span class="el_source">PhysicsSyncSystem.java</span></div><h1>PhysicsSyncSystem.java</h1><pre class="source lang-java linenums">package io.github.maze11.systems.physics;
+
+import com.badlogic.ashley.core.ComponentMapper;
+import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.Family;
+
+import io.github.maze11.components.PhysicsComponent;
+import io.github.maze11.components.TransformComponent;
+import io.github.maze11.fixedStep.FixedStepper;
+import io.github.maze11.fixedStep.IteratingFixedStepSystem;
+
+/**
+ * syncs position of entities' transform components with their box2d physics bodies
+ * ensures visual representation matches physics simulation
+ */
+public class PhysicsSyncSystem extends IteratingFixedStepSystem {
+<span class="fc" id="L17">    private final ComponentMapper&lt;PhysicsComponent&gt; physicsM = ComponentMapper.getFor(PhysicsComponent.class);</span>
+<span class="fc" id="L18">    private final ComponentMapper&lt;TransformComponent&gt; transformM = ComponentMapper.getFor(TransformComponent.class);</span>
+
+    public PhysicsSyncSystem(FixedStepper stepper) {
+<span class="fc" id="L21">        super(stepper, Family.all(PhysicsComponent.class, TransformComponent.class).get());</span>
+<span class="fc" id="L22">    }</span>
+
+    @Override
+    protected void fixedStepProcessEntity(Entity entity, float deltaTime) {
+<span class="fc" id="L26">        PhysicsComponent physics = physicsM.get(entity);</span>
+<span class="fc" id="L27">        TransformComponent transform = transformM.get(entity);</span>
+
+        // Sync the physics with the transform in case the transform is edited outside the physics engine
+<span class="fc" id="L30">        physics.body.setTransform(transform.position.x, transform.position.y, 0f);</span>
+<span class="fc" id="L31">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

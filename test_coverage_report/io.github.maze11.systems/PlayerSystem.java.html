@@ -1,0 +1,330 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PlayerSystem.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">headless</a> &gt; <a href="index.source.html" class="el_package">io.github.maze11.systems</a> &gt; <span class="el_source">PlayerSystem.java</span></div><h1>PlayerSystem.java</h1><pre class="source lang-java linenums">package io.github.maze11.systems;
+
+import com.badlogic.ashley.core.ComponentMapper;
+import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.Family;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.math.Vector2;
+
+import io.github.maze11.MazeGame;
+import io.github.maze11.assetLoading.AssetId;
+import io.github.maze11.assetLoading.AssetLoader;
+import io.github.maze11.components.*;
+import io.github.maze11.components.PlayerComponent.PlayerState;
+import io.github.maze11.fixedStep.FixedStepper;
+import io.github.maze11.fixedStep.IteratingFixedStepSystem;
+import io.github.maze11.messages.*;
+
+/**
+ * Handles input, player movement and other player logic.
+ * This includes sending footsteps when the player moves.
+ */
+public class PlayerSystem extends IteratingFixedStepSystem {
+
+    private final ComponentMapper&lt;PlayerComponent&gt; playerMapper;
+    private final ComponentMapper&lt;TransformComponent&gt; transformMapper;
+    private final ComponentMapper&lt;PhysicsComponent&gt; physicsMapper;
+    // Generic animation component for PlayerState
+    private final ComponentMapper&lt;AnimationComponent&gt; animMapper;
+
+    private final MessageListener messageListener;
+    private final MessagePublisher messagePublisher;
+    private final AssetLoader assetLoader;
+    public Vector2 constantDirection;
+
+    public PlayerSystem(FixedStepper fixedStepper, MessagePublisher messagePublisher, MazeGame game) {
+<span class="fc" id="L38">        super(fixedStepper,</span>
+<span class="fc" id="L39">                Family.all(PlayerComponent.class, TransformComponent.class, PhysicsComponent.class).get());</span>
+
+<span class="fc" id="L41">        playerMapper = ComponentMapper.getFor(PlayerComponent.class);</span>
+<span class="fc" id="L42">        transformMapper = ComponentMapper.getFor(TransformComponent.class);</span>
+<span class="fc" id="L43">        physicsMapper = ComponentMapper.getFor(PhysicsComponent.class);</span>
+<span class="fc" id="L44">        this.messagePublisher = messagePublisher;</span>
+        // Ashley ignores generics at runtime, so this is correct:
+<span class="fc" id="L46">        animMapper = ComponentMapper.getFor(AnimationComponent.class); // ComponentMapper&lt;AnimationComponent&gt;&gt;</span>
+
+<span class="fc" id="L48">        this.messageListener = new MessageListener(messagePublisher);</span>
+<span class="fc" id="L49">        this.assetLoader = game.getAssetLoader();</span>
+<span class="fc" id="L50">    }</span>
+    
+    /**
+     * Used during testing when the player needs to continuosly move in a direction
+     * e.g. testing hitboxes/item pickups
+     */
+    public void setConstDirection(Vector2 newDirection) {
+<span class="fc" id="L57">        this.constantDirection = newDirection;</span>
+<span class="fc" id="L58">    }</span>
+
+    /**
+     * Calculate a direction vector from movement input
+     */
+    private Vector2 getDirectionalInput() {
+<span class="fc" id="L64">        Vector2 direction = new Vector2();</span>
+
+<span class="pc bpc" id="L66" title="2 of 4 branches missed.">        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) || Gdx.input.isKeyPressed(Input.Keys.D))</span>
+<span class="nc" id="L67">            direction.x += 1f;</span>
+<span class="pc bpc" id="L68" title="2 of 4 branches missed.">        if (Gdx.input.isKeyPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.A))</span>
+<span class="nc" id="L69">            direction.x -= 1f;</span>
+
+<span class="pc bpc" id="L71" title="2 of 4 branches missed.">        if (Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.W))</span>
+<span class="nc" id="L72">            direction.y += 1f;</span>
+<span class="pc bpc" id="L73" title="2 of 4 branches missed.">        if (Gdx.input.isKeyPressed(Input.Keys.DOWN) || Gdx.input.isKeyPressed(Input.Keys.S))</span>
+<span class="nc" id="L74">            direction.y -= 1f;</span>
+
+<span class="pc bpc" id="L76" title="1 of 2 branches missed.">        if (direction.len2() &gt; 0)</span>
+<span class="nc" id="L77">            direction.nor();</span>
+
+<span class="fc" id="L79">        return direction;</span>
+    }
+
+    @Override
+    public void fixedUpdate(float deltaTime) {
+        
+        // CHANGED: Prevent updates if game paused
+<span class="fc bfc" id="L86" title="All 2 branches covered.">        if (!PauseSystem.gamePaused) {</span>
+<span class="fc bfc" id="L87" title="All 2 branches covered.">            while (messageListener.hasNext()) {</span>
+<span class="fc" id="L88">                var message = messageListener.next();</span>
+
+<span class="fc bfc" id="L90" title="All 9 branches covered.">                switch (message.type) {</span>
+<span class="fc" id="L91">                    case COLLECT_COFFEE -&gt; processCoffeeCollect((CoffeeCollectMessage) message);</span>
+<span class="fc" id="L92">                    case PUDDLE_INTERACT -&gt; processPuddleInteract((PuddleInteractMessage) message);</span>
+<span class="fc" id="L93">                    case ANKH_INTERACT -&gt; processAnkhInteract((AnkhInteractMessage) message);</span>
+<span class="fc" id="L94">                    case GOOSE_BITE -&gt; processGooseBite((GooseBiteMessage) message);</span>
+<span class="fc" id="L95">                    case PI_COLLECT -&gt; processPiCollect((PiCollectMessage) message);</span>
+<span class="fc" id="L96">                    case PI_ACTIVATED -&gt; processCowsayActivated((PiActivatedMessage) message);</span>
+<span class="fc" id="L97">                    case TELEPORTATION -&gt; processTeleportation((TeleportationMessage) message);</span>
+<span class="fc" id="L98">                    case BULLY_BRIBED -&gt; processBullyBribe((BullyBribeMessage) message);</span>
+                    default -&gt; {
+                    }
+                }
+<span class="fc" id="L102">            }</span>
+<span class="fc" id="L103">            super.fixedUpdate(deltaTime);</span>
+        }
+<span class="fc" id="L105">    }</span>
+
+
+    private void processCoffeeCollect(CoffeeCollectMessage message) {
+<span class="fc" id="L109">        PlayerComponent player = playerMapper.get(message.getPlayer());</span>
+<span class="fc" id="L110">        player.speedBonuses.add(new PlayerComponent.SpeedBonus(message.speedBonusAmount, message.duration));</span>
+<span class="fc" id="L111">    }</span>
+
+    private void processPuddleInteract(PuddleInteractMessage message) {
+<span class="fc" id="L114">        PlayerComponent player = playerMapper.get(message.getPlayer());</span>
+<span class="fc" id="L115">        player.speedBonuses.add(new PlayerComponent.SpeedBonus(message.speedBonusAmount, message.duration));</span>
+
+<span class="fc" id="L117">    }</span>
+
+    //Teleportation effect
+    private void processTeleportation(TeleportationMessage message) {
+<span class="fc" id="L121">        PlayerComponent player = playerMapper.get(message.getPlayer());</span>
+<span class="fc" id="L122">        System.out.println(&quot;PlayerSystem.processTeleportation triggered&quot;);</span>
+<span class="fc" id="L123">        Vector2 playerPos = transformMapper.get(message.getPlayer()).position;</span>
+<span class="fc" id="L124">        System.out.println(playerPos.x + &quot; &quot; + playerPos.y);</span>
+<span class="fc" id="L125">        transformMapper.get(message.getPlayer()).position.set(message.location);</span>
+<span class="fc" id="L126">    }</span>
+
+    private void processAnkhInteract(AnkhInteractMessage message) {
+<span class="fc" id="L129">        PlayerComponent player = playerMapper.get(message.getPlayer());</span>
+        /* actual ankh effect: */
+<span class="fc" id="L131">        player.isInvulnerable = true;</span>
+        // add timer effect here, switch back after: //
+
+<span class="fc" id="L134">    }</span>
+
+    private void processBullyBribe(BullyBribeMessage message) {
+<span class="fc" id="L137">        PlayerComponent player = playerMapper.get(message.getPlayer());</span>
+<span class="fc" id="L138">        player.hasBribe = true;</span>
+
+<span class="fc" id="L140">    }</span>
+
+    // CHANGED: Added method to allow the player to collect the Pi objects
+    private void processPiCollect(PiCollectMessage message) {
+<span class="fc" id="L144">        PiCollectMessage.numPis++;</span>
+<span class="fc" id="L145">        PiActivatedMessage.cowsayActivated = false;</span>
+        // Once all Pi's active, send Cowsay
+<span class="fc bfc" id="L147" title="All 2 branches covered.">        if (PiCollectMessage.numPis == 3) {</span>
+<span class="fc" id="L148">            messagePublisher.publish(new PiActivatedMessage());</span>
+        }
+<span class="fc" id="L150">    }</span>
+
+    private void processCowsayActivated(PiActivatedMessage message) {
+<span class="fc" id="L153">        String cowsay = &quot;&quot;&quot;</span>
+                     __________________
+                    / One does not simply   \\
+                    \\ walk out of university   /
+                      ----------------------------
+                      \\   ^__^
+                       \\  (oo)\\_____
+                          (__)\\           )\\/\\
+                                 ||----w |
+                                 ||        ||
+                    &quot;&quot;&quot;;
+<span class="fc" id="L164">        messagePublisher.publish(new ToastMessage(cowsay, 5f));</span>
+<span class="fc" id="L165">    }</span>
+
+    private void processGooseBite(GooseBiteMessage message) {
+<span class="fc" id="L168">        PlayerComponent player = playerMapper.get(message.getPlayer());</span>
+<span class="fc" id="L169">        System.out.println(&quot;PlayerSystem.processGooseBite triggered&quot;);</span>
+<span class="fc" id="L170">        Vector2 playerPos = transformMapper.get(message.getPlayer()).position;</span>
+<span class="fc" id="L171">        Vector2 goosePos = transformMapper.get(message.getInteractable()).position;</span>
+
+        // only trigger if player isn't invulnerable:
+<span class="fc bfc" id="L174" title="All 2 branches covered.">        if (player.isInvulnerable == false) {</span>
+<span class="fc" id="L175">            Vector2 knockDir = new Vector2(playerPos).sub(goosePos).nor();</span>
+<span class="fc" id="L176">            addKnockback(playerMapper.get(message.getPlayer()), knockDir.scl(message.knockbackSpeed));</span>
+        }
+
+<span class="fc" id="L179">    }</span>
+
+    @Override
+    protected void fixedStepProcessEntity(Entity entity, float deltaTime) {
+<span class="fc" id="L183">        PlayerComponent player = playerMapper.get(entity);</span>
+<span class="fc" id="L184">        PhysicsComponent physics = physicsMapper.get(entity);</span>
+
+        // Generic component pulled as correct type
+<span class="fc" id="L187">        AnimationComponent&lt;PlayerState&gt; anim = animMapper.get(entity);</span>
+
+<span class="fc" id="L189">        Vector2 direction = getDirectionalInput();</span>
+        
+        // Applying test direction if it has been set
+<span class="fc bfc" id="L192" title="All 2 branches covered.">        if (constantDirection != null) {</span>
+<span class="fc" id="L193">            direction = constantDirection;</span>
+        }
+
+        // Movement
+<span class="fc" id="L197">        float maxSpeed = player.maxSpeed;</span>
+<span class="fc bfc" id="L198" title="All 2 branches covered.">        for (int i = 0; i &lt; player.speedBonuses.size(); i++) {</span>
+<span class="fc" id="L199">            var bonus = player.speedBonuses.get(i);</span>
+<span class="fc" id="L200">            maxSpeed += bonus.amount;</span>
+<span class="fc" id="L201">            bonus.timeRemaining -= deltaTime;</span>
+
+<span class="pc bpc" id="L203" title="1 of 2 branches missed.">            if (bonus.timeRemaining &lt;= 0) {</span>
+<span class="nc" id="L204">                player.speedBonuses.remove(i);</span>
+<span class="nc" id="L205">                i--;</span>
+            }
+        }
+
+<span class="fc" id="L209">        Vector2 naturalVelocity = player.naturalVelocity;</span>
+<span class="fc" id="L210">        Vector2 desiredVelocity = new Vector2(direction).scl(maxSpeed);</span>
+
+<span class="fc bfc" id="L212" title="All 2 branches covered.">        if (direction.len2() &gt; 0) {</span>
+<span class="fc" id="L213">            Vector2 toTarget = desiredVelocity.sub(naturalVelocity);</span>
+<span class="fc" id="L214">            float accelStep = player.acceleration * deltaTime;</span>
+
+<span class="pc bpc" id="L216" title="1 of 2 branches missed.">            if (toTarget.len2() &gt; accelStep * accelStep)</span>
+<span class="fc" id="L217">                toTarget.nor().scl(accelStep);</span>
+
+<span class="fc" id="L219">            naturalVelocity.add(toTarget);</span>
+<span class="fc" id="L220">        } else {</span>
+<span class="fc" id="L221">            float speed = naturalVelocity.len();</span>
+<span class="pc bpc" id="L222" title="1 of 2 branches missed.">            if (speed &gt; 0) {</span>
+<span class="nc" id="L223">                float dec = player.deceleration * deltaTime;</span>
+<span class="nc" id="L224">                speed = Math.max(speed - dec, 0);</span>
+<span class="nc" id="L225">                naturalVelocity.nor().scl(speed);</span>
+            }
+        }
+
+<span class="fc bfc" id="L229" title="All 2 branches covered.">        if (naturalVelocity.len2() &gt; maxSpeed * maxSpeed)</span>
+<span class="fc" id="L230">            naturalVelocity.nor().scl(maxSpeed);</span>
+
+        // Knockback decay
+<span class="fc" id="L233">        Vector2 knockback = player.currentKnockback;</span>
+<span class="fc bfc" id="L234" title="All 2 branches covered.">        if (knockback.len2() &gt; 0.001f) {</span>
+<span class="fc" id="L235">            float r = player.knockbackRecovery * deltaTime;</span>
+<span class="fc" id="L236">            float newSpeed = Math.max(knockback.len() - r, 0);</span>
+<span class="fc" id="L237">            knockback.nor().scl(newSpeed);</span>
+        }
+
+<span class="fc" id="L240">        physics.body.setLinearVelocity(</span>
+                naturalVelocity.x + knockback.x,
+                naturalVelocity.y + knockback.y);
+
+        // Animation
+        PlayerState newState;
+        
+        // CHANGED: Update animation only if spriteBatch fetched
+<span class="pc bpc" id="L248" title="1 of 2 branches missed.">        if (MazeGame.batch != null) {</span>
+<span class="nc bnc" id="L249" title="All 2 branches missed.">            if (direction.len2() == 0) {</span>
+<span class="nc" id="L250">                PlayerState last = anim.currentState;</span>
+
+<span class="nc bnc" id="L252" title="All 5 branches missed.">                switch (last) {</span>
+<span class="nc" id="L253">                    case WALK_UP, IDLE_UP -&gt; newState = PlayerState.IDLE_UP;</span>
+<span class="nc" id="L254">                    case WALK_DOWN, IDLE_DOWN -&gt; newState = PlayerState.IDLE_DOWN;</span>
+<span class="nc" id="L255">                    case WALK_LEFT, IDLE_LEFT -&gt; newState = PlayerState.IDLE_LEFT;</span>
+<span class="nc" id="L256">                    case WALK_RIGHT, IDLE_RIGHT -&gt; newState = PlayerState.IDLE_RIGHT;</span>
+
+<span class="nc" id="L258">                    default -&gt; newState = PlayerState.IDLE_DOWN;</span>
+                }
+
+<span class="nc" id="L261">            } else {</span>
+<span class="nc bnc" id="L262" title="All 2 branches missed.">                if (Math.abs(direction.x) &gt; Math.abs(direction.y)) {</span>
+<span class="nc bnc" id="L263" title="All 2 branches missed.">                    newState = direction.x &gt; 0 ? PlayerState.WALK_RIGHT : PlayerState.WALK_LEFT;</span>
+                } else {
+<span class="nc bnc" id="L265" title="All 2 branches missed.">                    newState = direction.y &gt; 0 ? PlayerState.WALK_UP : PlayerState.WALK_DOWN;</span>
+                }
+            }
+
+<span class="nc bnc" id="L269" title="All 2 branches missed.">            if (anim.currentState != newState) {</span>
+<span class="nc" id="L270">                anim.currentState = newState;</span>
+<span class="nc" id="L271">                anim.elapsed = 0f;</span>
+            } else {
+<span class="nc" id="L273">                anim.elapsed += deltaTime;</span>
+            }
+
+<span class="nc" id="L276">            var animation = anim.animations.get(anim.currentState);</span>
+<span class="nc bnc" id="L277" title="All 2 branches missed.">            if (animation != null) {</span>
+<span class="nc" id="L278">                anim.currentFrame = animation.getKeyFrame(anim.elapsed, true);</span>
+            }
+        }
+        
+<span class="fc" id="L282">    }</span>
+
+    private void addKnockback(PlayerComponent pc, Vector2 extra) {
+<span class="fc" id="L285">        Vector2 current = pc.currentKnockback;</span>
+<span class="fc" id="L286">        float maxMag = Math.max(current.len(), extra.len());</span>
+
+<span class="fc" id="L288">        current.add(extra);</span>
+
+<span class="pc bpc" id="L290" title="1 of 2 branches missed.">        if (current.len() &gt; maxMag)</span>
+<span class="nc" id="L291">            current.nor().scl(maxMag);</span>
+<span class="fc" id="L292">    }</span>
+
+    @Override
+    protected void processEntity(Entity entity, float deltaTime) {
+<span class="fc" id="L296">        PlayerComponent player = playerMapper.get(entity);</span>
+
+        // Only play footsteps while the player is moving
+<span class="fc bfc" id="L299" title="All 2 branches covered.">        if (player.naturalVelocity.len2() &gt; 0) {</span>
+<span class="fc" id="L300">            accumulateFootstep(player, deltaTime);</span>
+        }
+<span class="fc" id="L302">    }</span>
+
+    /**
+     * Advances the footstep time and play a footstep if it is due
+     */
+    private void accumulateFootstep(PlayerComponent player, float deltaTime) {
+
+        // Footsteps happen faster while boosted
+<span class="fc" id="L310">        float timeMultiplier = 1f;</span>
+<span class="pc bpc" id="L311" title="1 of 2 branches missed.">        if (!player.speedBonuses.isEmpty()) {</span>
+<span class="nc" id="L312">            timeMultiplier = player.boostFootstepMultiplier;</span>
+        }
+
+        // Accumulate the time
+<span class="fc" id="L316">        player.timeSinceLastFootstep += deltaTime * timeMultiplier;</span>
+
+        // If it is time for another footstep, take it
+<span class="fc bfc" id="L319" title="All 2 branches covered.">        if (player.timeSinceLastFootstep &gt; player.timeBetweenFootsteps) {</span>
+<span class="fc" id="L320">            player.timeSinceLastFootstep = 0f;</span>
+            // Only play sound if a test isn't being run
+<span class="pc bpc" id="L322" title="1 of 2 branches missed.">            if (MazeGame.batch != null) {</span>
+<span class="nc" id="L323">                messageListener.publisher</span>
+<span class="nc" id="L324">                    .publish(new SoundMessage(assetLoader.get(AssetId.FOOTSTEP, Sound.class), 0.5f, 0.6f));</span>
+            }
+            
+        }
+<span class="fc" id="L328">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

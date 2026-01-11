@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PhysicsComponent.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">headless</a> &gt; <a href="index.source.html" class="el_package">io.github.maze11.components</a> &gt; <span class="el_source">PhysicsComponent.java</span></div><h1>PhysicsComponent.java</h1><pre class="source lang-java linenums">package io.github.maze11.components;
+
+import com.badlogic.ashley.core.Component;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
+
+/**
+ * component that holds physics data for box2d bodies
+ * uses private field with getters and setters to prevent inconsistent data when pooling
+ */
+
+<span class="fc" id="L12">public class PhysicsComponent implements Component {</span>
+    // Box2D body associated with this component
+    public Body body;
+
+    // enum defining collider types
+<span class="fc" id="L17">    public enum ColliderType {</span>
+<span class="fc" id="L18">        BOX,      // Rectangle collider</span>
+<span class="fc" id="L19">        CIRCLE,   // Circle collider</span>
+
+    }
+    // type of collider (box or circle)
+<span class="fc" id="L23">    private ColliderType colliderType = ColliderType.BOX;</span>
+    // For BOX: width and height
+<span class="fc" id="L25">    private float colliderWidth = 0f;</span>
+<span class="fc" id="L26">    private float colliderHeight = 0f;</span>
+
+    // For CIRCLE: radius
+<span class="fc" id="L29">    private float colliderRadius = 0f;</span>
+    // Offset from body center (for BOX and CIRCLE only)
+<span class="fc" id="L31">    private Vector2 colliderOffset = new Vector2(0f, 0f);</span>
+
+    // Gets the collider type
+    public ColliderType getColliderType() {
+<span class="fc" id="L35">        return colliderType;</span>
+    }
+    // gets the width of box collider
+    public float getColliderWidth() {
+<span class="fc" id="L39">        return colliderWidth;</span>
+    }
+    // gets the height of box collider
+    public float getColliderHeight() {
+<span class="fc" id="L43">        return colliderHeight;</span>
+    }
+    // gets radius of circle collider
+    public float getColliderRadius() {
+<span class="fc" id="L47">        return colliderRadius;</span>
+    }
+    // gets the offset from body centre for both
+    public Vector2 getColliderOffset() {
+<span class="fc" id="L51">        return colliderOffset;</span>
+    }
+
+     /**
+      * Configures this component to act as a box collider
+      */
+    public PhysicsComponent setBox(float width, float height) {
+<span class="nc" id="L58">        this.colliderType = ColliderType.BOX;</span>
+<span class="nc" id="L59">        this.colliderWidth = width;</span>
+<span class="nc" id="L60">        this.colliderHeight = height;</span>
+<span class="nc" id="L61">        this.colliderOffset.set(0f, 0f);</span>
+<span class="nc" id="L62">        return this;</span>
+    }
+
+    /**
+     * Configures this component to act as a box collider with offset
+     */
+    public PhysicsComponent setBox(float width, float height, float offsetX, float offsetY) {
+<span class="fc" id="L69">        this.colliderType = ColliderType.BOX;</span>
+<span class="fc" id="L70">        this.colliderWidth = width;</span>
+<span class="fc" id="L71">        this.colliderHeight = height;</span>
+<span class="fc" id="L72">        this.colliderOffset.set(offsetX, offsetY);</span>
+<span class="fc" id="L73">        return this;</span>
+    }
+
+    /**
+    * Configures this component to act as a circle collider
+    */
+    public PhysicsComponent setCircle(float radius) {
+<span class="nc" id="L80">        this.colliderType = ColliderType.CIRCLE;</span>
+<span class="nc" id="L81">        this.colliderRadius = radius;</span>
+<span class="nc" id="L82">        this.colliderOffset.set(0f, 0f);</span>
+<span class="nc" id="L83">        return this;</span>
+    }
+
+    /**
+     * Configures this component to act as a circle collider with an offset
+     */
+    public PhysicsComponent setCircle(float radius, float offsetX, float offsetY) {
+<span class="fc" id="L90">        this.colliderType = ColliderType.CIRCLE;</span>
+<span class="fc" id="L91">        this.colliderRadius = radius;</span>
+<span class="fc" id="L92">        this.colliderOffset.set(offsetX, offsetY);</span>
+<span class="fc" id="L93">        return this;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

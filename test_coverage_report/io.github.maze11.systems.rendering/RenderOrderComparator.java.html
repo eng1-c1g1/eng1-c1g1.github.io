@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RenderOrderComparator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">headless</a> &gt; <a href="index.source.html" class="el_package">io.github.maze11.systems.rendering</a> &gt; <span class="el_source">RenderOrderComparator.java</span></div><h1>RenderOrderComparator.java</h1><pre class="source lang-java linenums">package io.github.maze11.systems.rendering;
+
+import com.badlogic.ashley.core.ComponentMapper;
+import com.badlogic.ashley.core.Entity;
+import io.github.maze11.components.SpriteComponent;
+import io.github.maze11.components.TransformComponent;
+
+import java.util.Comparator;
+
+/**
+ * Comparator used for sorting entities by rendering order. Sorts by RenderLayer initially,
+ * then renders based off y coordinate in case of a tie.
+ * Lower y are rendered last to achieve top-down illusion of depth.
+ */
+class RenderOrderComparator implements Comparator&lt;Entity&gt; {
+    private final ComponentMapper&lt;TransformComponent&gt; transM;
+    private final ComponentMapper&lt;SpriteComponent&gt; spriteM;
+
+<span class="nc" id="L19">    public RenderOrderComparator() {</span>
+<span class="nc" id="L20">        transM = ComponentMapper.getFor(TransformComponent.class);</span>
+<span class="nc" id="L21">        spriteM = ComponentMapper.getFor(SpriteComponent.class);</span>
+<span class="nc" id="L22">    }</span>
+
+    /**
+     * Determines which of the entities should be rendered in front of the other. Namely, if they should swap places
+     */
+    @Override
+    public int compare(Entity e1, Entity e2) {
+        //gets the layers as ints so that they can be compared by magnitude
+<span class="nc" id="L30">        int sprite1Layer = spriteM.get(e1).renderLayer.ordinal();</span>
+<span class="nc" id="L31">        int sprite2Layer = spriteM.get(e2).renderLayer.ordinal();</span>
+
+        //compares the render layers: anything on lower layers is rendered before higher layers
+<span class="nc bnc" id="L34" title="All 2 branches missed.">        if (sprite1Layer &lt; sprite2Layer) {</span>
+<span class="nc" id="L35">            return -1;</span>
+        }
+<span class="nc bnc" id="L37" title="All 2 branches missed.">        if (sprite1Layer &gt; sprite2Layer) {</span>
+<span class="nc" id="L38">            return 1;</span>
+        }
+        else {
+            //if the layers are the same, compare by y position
+<span class="nc" id="L42">            float y1 = transM.get(e1).position.y;</span>
+<span class="nc" id="L43">            float y2 = transM.get(e2).position.y;</span>
+
+            //The expression says (y2, y1) instead of the other way around since objects lower down are rendered last
+<span class="nc" id="L46">            return Float.compare(y2, y1);</span>
+
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

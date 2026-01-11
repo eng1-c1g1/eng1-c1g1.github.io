@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GameOverScreen.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">headless</a> &gt; <a href="index.source.html" class="el_package">io.github.maze11.screens</a> &gt; <span class="el_source">GameOverScreen.java</span></div><h1>GameOverScreen.java</h1><pre class="source lang-java linenums">package io.github.maze11.screens;
+
+import java.util.ArrayList;
+
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+
+import io.github.maze11.MazeGame;
+import io.github.maze11.systems.gameState.LeaderBoardSystem;
+import io.github.maze11.systems.gameState.ScoreCard;
+import io.github.maze11.ui.FontGenerator;
+
+/**
+ * Game over screen shown when timer runs out.
+ * Displays score passed from GameStateSystem.
+ * provides options to restart or return to main menu
+ *
+ * this screen is triggered by GameStateSystem when it recieves a TIMER_EXPIRED message.
+ */
+public class GameOverScreen extends BaseMenuScreen {
+    private final int score;
+    private ScoreCard scoreCard;
+
+    public GameOverScreen(MazeGame game, ScoreCard scoreCard) {
+<span class="nc" id="L30">        super(game);</span>
+<span class="nc" id="L31">        this.score = scoreCard.totalScore();</span>
+<span class="nc" id="L32">        this.scoreCard = scoreCard;</span>
+<span class="nc" id="L33">        System.out.println(&quot;Game Over screen launched - Score: &quot; + score);</span>
+<span class="nc" id="L34">        buildUI();</span>
+        
+<span class="nc" id="L36">    }</span>
+
+    @Override
+    protected void buildUI() {
+<span class="nc" id="L40">        Table table = new Table();</span>
+<span class="nc" id="L41">        table.setFillParent(true);</span>
+
+        // Title
+<span class="nc" id="L44">        Label.LabelStyle titleStyle = new Label.LabelStyle(titleFont, Color.WHITE);</span>
+<span class="nc" id="L45">        Label title = new Label(&quot;The Dean has arrived!&quot;, titleStyle);</span>
+
+        // Subtitle
+<span class="nc" id="L48">        Label.LabelStyle bodyStyle = new Label.LabelStyle(bodyFont, Color.WHITE);</span>
+<span class="nc" id="L49">        Label subtitle = new Label(&quot;You have failed to escape in time...&quot;, bodyStyle);</span>
+
+        // Score
+<span class="nc" id="L52">        Label.LabelStyle scoreStyle = new Label.LabelStyle(bodyFont, Color.YELLOW);</span>
+<span class="nc" id="L53">        Label scoreLabel = new Label(&quot;Score: &quot; + score, scoreStyle);</span>
+
+        // CHANGED: Score breakdown now appears after a loss
+        // Create the breakdown labels from the scorecard
+
+<span class="nc" id="L58">        Label.LabelStyle detailStyle = new Label.LabelStyle(bodyFont, Color.CYAN);</span>
+
+<span class="nc" id="L60">        ArrayList&lt;Label&gt; breakdownLabels = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L61" title="All 2 branches missed.">        for (String str : scoreCard.breakdown()){</span>
+<span class="nc" id="L62">            breakdownLabels.add(new Label(str, detailStyle));</span>
+<span class="nc" id="L63">        }</span>
+   
+<span class="nc" id="L65">        BitmapFont buttonFont = FontGenerator.generateRobotoFont(24, Color.WHITE, skin);</span>
+<span class="nc" id="L66">        TextButton.TextButtonStyle buttonStyle = new TextButton.TextButtonStyle(skin.get(TextButton.TextButtonStyle.class));</span>
+<span class="nc" id="L67">        buttonStyle.font = buttonFont;</span>
+
+
+<span class="nc" id="L70">        TextButton restartButton = new TextButton(&quot;Try Again&quot;, buttonStyle);</span>
+<span class="nc" id="L71">        restartButton.addListener(new ClickListener() {</span>
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+<span class="nc" id="L74">                game.switchScreen(new LevelScreen(game)); // new LevelScreen i.e. fresh ECS World</span>
+<span class="nc" id="L75">                playMenuClick();</span>
+<span class="nc" id="L76">            }</span>
+        });
+
+<span class="nc" id="L79">        TextButton menuButton = new TextButton(&quot;Main Menu&quot;, buttonStyle);</span>
+<span class="nc" id="L80">        menuButton.addListener(new ClickListener() {</span>
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+<span class="nc" id="L83">                game.switchScreen(new MenuScreen(game));</span>
+<span class="nc" id="L84">                playMenuClick();</span>
+<span class="nc" id="L85">            }</span>
+        });
+        // vertical stack layout again between elements
+<span class="nc" id="L88">        table.add(title).padBottom(20).row();</span>
+<span class="nc" id="L89">        table.add(subtitle).padBottom(20).row();</span>
+<span class="nc" id="L90">        table.add(scoreLabel).padBottom(20).row();</span>
+        // Display all the breakdown labels
+<span class="nc bnc" id="L92" title="All 2 branches missed.">        for (var label : breakdownLabels){</span>
+<span class="nc" id="L93">            table.add(label).padBottom(5).row();</span>
+<span class="nc" id="L94">        }</span>
+<span class="nc" id="L95">        table.padBottom(40).row();</span>
+<span class="nc" id="L96">        table.add(restartButton).width(200).height(60).padBottom(10).row();</span>
+<span class="nc" id="L97">        table.add(menuButton).width(200).height(60);</span>
+
+<span class="nc" id="L99">        stage.addActor(table);</span>
+
+        // Checking whether score is a high score
+<span class="nc" id="L102">        LeaderBoardSystem leaderboard = new LeaderBoardSystem(MenuScreen.playerName);</span>
+<span class="nc" id="L103">        leaderboard.submitScore(score);</span>
+<span class="nc" id="L104">    }</span>
+
+    @Override
+    protected float[] getBackgroundColor() {
+<span class="nc" id="L108">        return new float[]{0.3f, 0.1f, 0.1f, 1f}; // Dark red</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

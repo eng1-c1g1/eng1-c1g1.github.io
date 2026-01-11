@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>LeaderBoardSystem.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">headless</a> &gt; <a href="index.source.html" class="el_package">io.github.maze11.systems.gameState</a> &gt; <span class="el_source">LeaderBoardSystem.java</span></div><h1>LeaderBoardSystem.java</h1><pre class="source lang-java linenums">package io.github.maze11.systems.gameState;
+
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+
+import com.badlogic.gdx.Preferences;
+
+import com.badlogic.gdx.Gdx;
+
+//CHANGED: Added LeaderBoardSystem class
+public class LeaderBoardSystem {
+
+<span class="fc" id="L14">    final int leaderboardLen = 5;   // Max number of entries to store/display in the leaderboard</span>
+<span class="fc" id="L15">    public static String hiScoreFile = &quot;hiScores&quot;;</span>
+    String name;
+    int score;
+
+<span class="fc" id="L19">    public LeaderBoardSystem(String name) {</span>
+<span class="fc" id="L20">        this.name = name;</span>
+<span class="fc" id="L21">    }</span>
+
+     /**
+      * Checks if the current score is a new high-score, then saves it in the
+      * leaderboard file if it is.
+      * @param score
+      */
+    public void submitScore(int score) {
+        
+<span class="fc" id="L30">        Preferences hiScores = Gdx.app.getPreferences(hiScoreFile);</span>
+        // If a score has already been submitted for this player, check whether the
+        // new score is larger or not, then replace if necessary.
+<span class="fc bfc" id="L33" title="All 2 branches covered.">        if (hiScores.contains(name)) {</span>
+<span class="fc bfc" id="L34" title="All 2 branches covered.">            if (hiScores.getInteger(name) &lt; score) {</span>
+<span class="fc" id="L35">                hiScores.putInteger(name, score);</span>
+<span class="fc" id="L36">                hiScores.flush();</span>
+            }
+<span class="fc" id="L38">            return;</span>
+        }
+        // Only allows 5 entries in score file at once
+<span class="fc bfc" id="L41" title="All 2 branches covered.">        if (hiScores.get().size() == leaderboardLen) {</span>
+            
+            // Checking whether new score is higher than the scores in the file.
+<span class="fc" id="L44">            String lowestScoreKey = compareScore(score);</span>
+
+<span class="fc bfc" id="L46" title="All 2 branches covered.">            if (lowestScoreKey == null) {  </span>
+                // score isn't a new high score
+<span class="fc" id="L48">                return;</span>
+            }
+<span class="fc" id="L50">            hiScores.remove(lowestScoreKey);</span>
+        }
+        
+<span class="fc" id="L53">        hiScores.putInteger(name,score);</span>
+<span class="fc" id="L54">        hiScores.flush();</span>
+<span class="fc" id="L55">        return;</span>
+        
+    }
+
+    /**
+     * Compares the score of the current game to the scores in the leaderboard file
+     * and returns which entry (if any) in the file the score should replace.
+     * @param score
+     * @returns a key from the preferences file, or null if the score is not a new high score
+     * */
+    private String compareScore(int score) {
+        
+<span class="fc" id="L67">        Preferences hiScores = Gdx.app.getPreferences(hiScoreFile);</span>
+
+<span class="fc bfc" id="L69" title="All 2 branches covered.">        for (String key : hiScores.get().keySet()) {</span>
+<span class="fc" id="L70">            int hiScore = hiScores.getInteger(key);</span>
+<span class="fc bfc" id="L71" title="All 2 branches covered.">            if (hiScore &lt; score) {</span>
+<span class="fc" id="L72">                return key;</span>
+            }
+<span class="fc" id="L74">        }</span>
+<span class="fc" id="L75">        return null;</span>
+    }
+
+    /**
+     * 
+     * @returns a string of of all the lines in the leaderboard file seperated by newlines
+     */
+    public static List&lt;String&gt; readLeaderboard() {
+        
+        // Formatting Leaderboard
+<span class="fc" id="L85">        List&lt;String&gt; formattedLb = new ArrayList&lt;&gt;();</span>
+
+<span class="fc" id="L87">        Preferences hiScores = Gdx.app.getPreferences(hiScoreFile);</span>
+
+<span class="fc bfc" id="L89" title="All 2 branches covered.">        if (hiScores.get().size() == 0) {</span>
+<span class="fc" id="L90">            return null;</span>
+        }
+<span class="fc bfc" id="L92" title="All 2 branches covered.">        for (String key : hiScores.get().keySet()) {</span>
+<span class="fc" id="L93">            int score = hiScores.getInteger(key);</span>
+<span class="fc" id="L94">            String entry = String.format(&quot;%s - %d&quot;, key, score);</span>
+<span class="fc" id="L95">            formattedLb.add(entry);</span>
+<span class="fc" id="L96">        }</span>
+<span class="fc" id="L97">        formattedLb.sort(new leaderBoardSort());</span>
+<span class="fc" id="L98">        return formattedLb;</span>
+    }
+
+    // CHANGED - added achievement formatting:
+   public static List&lt;String&gt; readAchievements() {
+	// format achievements list:
+<span class="nc" id="L104">	List&lt;String&gt; userAchievements = new ArrayList&lt;&gt;();</span>
+	
+<span class="nc" id="L106">	Preferences achievements = Gdx.app.getPreferences(&quot;Achievements&quot;);</span>
+
+<span class="nc bnc" id="L108" title="All 2 branches missed.">	if (achievements.get().size() == 0) {</span>
+<span class="nc" id="L109">		return null;</span>
+	}
+
+	// get all achievements, add to formatted list:
+<span class="nc bnc" id="L113" title="All 2 branches missed.">	for (String achvName : achievements.get().keySet()) {</span>
+		// achievements meant to be hidden, only add if achieved:
+<span class="nc bnc" id="L115" title="All 2 branches missed.">		if (achievements.getBoolean(achvName) == true) {</span>
+<span class="nc" id="L116">			userAchievements.add(achvName);</span>
+		}
+<span class="nc" id="L118">	}</span>
+<span class="nc" id="L119">	return userAchievements;</span>
+   }
+}
+
+// Compares leaderboard entry strings based on their score component.
+<span class="fc" id="L124">class leaderBoardSort implements Comparator {</span>
+    public int compare(Object obj1, Object obj2) {
+<span class="fc" id="L126">        String str1 = (String)obj1;</span>
+<span class="fc" id="L127">        String str2 = (String)obj2;</span>
+
+<span class="fc" id="L129">        int score1 = -9999;</span>
+<span class="fc" id="L130">        int score2 = -9999;</span>
+
+<span class="pc bpc" id="L132" title="1 of 2 branches missed.">        for (int i = 0; i &lt; str1.length(); i++) {</span>
+<span class="fc bfc" id="L133" title="All 2 branches covered.">            if (str1.charAt(i) == '-') {</span>
+<span class="fc" id="L134">                score1 = Integer.parseInt(str1.substring(i + 2));</span>
+<span class="fc" id="L135">                break;</span>
+            }
+        }
+
+<span class="pc bpc" id="L139" title="1 of 2 branches missed.">        for (int i = 0; i &lt; str2.length(); i++) {</span>
+<span class="fc bfc" id="L140" title="All 2 branches covered.">            if (str2.charAt(i) == '-') {</span>
+<span class="fc" id="L141">                score2 = Integer.parseInt(str2.substring(i + 2));</span>
+<span class="fc" id="L142">                break;</span>
+            }
+        }
+
+<span class="fc bfc" id="L146" title="All 2 branches covered.">        if (score1 &lt; score2) return 1;</span>
+<span class="pc bpc" id="L147" title="1 of 2 branches missed.">        if (score1 &gt; score2) return -1;</span>
+<span class="nc" id="L148">        return 0;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

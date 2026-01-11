@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MenuScreen.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">headless</a> &gt; <a href="index.source.html" class="el_package">io.github.maze11.screens</a> &gt; <span class="el_source">MenuScreen.java</span></div><h1>MenuScreen.java</h1><pre class="source lang-java linenums">package io.github.maze11.screens;
+
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import io.github.maze11.MazeGame;
+import io.github.maze11.systems.gameState.LeaderBoardSystem;
+import io.github.maze11.ui.FontGenerator;
+
+/**
+ * Main menu screen contains UI logic for buttons when game starts
+ * provides options to start gam or quit
+ */
+public class MenuScreen extends BaseMenuScreen {
+
+    static String playerName;
+<span class="nc" id="L21">    boolean nameEntered = false;</span>
+    
+    public MenuScreen(MazeGame game) {
+<span class="nc" id="L24">        super(game);</span>
+<span class="nc" id="L25">        System.out.println(&quot;Menu screen launched&quot;);</span>
+<span class="nc" id="L26">        buildUI();</span>
+<span class="nc" id="L27">    }</span>
+
+    @Override
+    protected void buildUI() {
+<span class="nc" id="L31">        Table outerTable = new Table();</span>
+<span class="nc" id="L32">        Table innerTable = new Table();</span>
+        //outerTable.add().expandX();
+<span class="nc" id="L34">        outerTable.setFillParent(true);</span>
+        
+        // Building Main Menu
+<span class="nc" id="L37">        Label.LabelStyle titleStyle = new Label.LabelStyle(titleFont, Color.WHITE);</span>
+<span class="nc" id="L38">        Label title = new Label(&quot;Maze Game&quot;, titleStyle);</span>
+
+<span class="nc" id="L40">        Label.LabelStyle bodyStyle = new Label.LabelStyle(bodyFont, Color.LIGHT_GRAY);</span>
+<span class="nc" id="L41">        Label subtitle = new Label(&quot;Navigate the maze!&quot;, bodyStyle);</span>
+
+<span class="nc" id="L43">        BitmapFont buttonFont = FontGenerator.generateRobotoFont(24, Color.WHITE, skin);</span>
+<span class="nc" id="L44">        TextButton.TextButtonStyle buttonStyle = new TextButton.TextButtonStyle(skin.get(TextButton.TextButtonStyle.class));</span>
+<span class="nc" id="L45">        buttonStyle.font = buttonFont;</span>
+
+<span class="nc" id="L47">        TextField nameEntry = new TextField(&quot;Enter your name&quot;, skin);</span>
+<span class="nc" id="L48">        nameEntry.hasKeyboardFocus();</span>
+<span class="nc" id="L49">        nameEntry.addListener(new ChangeListener() {</span>
+            
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+<span class="nc" id="L53">                String enteredName = nameEntry.getText();</span>
+                // Ensuring the player enters a name
+<span class="nc bnc" id="L55" title="All 4 branches missed.">                if (!enteredName.equals(&quot;&quot;) &amp;&amp; !enteredName.equals(&quot;Enter your name&quot;)) {</span>
+<span class="nc bnc" id="L56" title="All 2 branches missed.">                    if (enteredName.length() &gt;= 20) {</span>
+<span class="nc" id="L57">                        enteredName = enteredName.substring(0, 20);</span>
+                    }
+<span class="nc" id="L59">                    MenuScreen.playerName = enteredName;</span>
+<span class="nc" id="L60">                    nameEntered = true;</span>
+                }
+                // If the player doesn't enter their name, it is set for them
+<span class="nc" id="L63">            }</span>
+        });
+
+<span class="nc" id="L66">        TextButton startButton = new TextButton(&quot;Start Game&quot;, buttonStyle);</span>
+<span class="nc" id="L67">        startButton.addListener(new ClickListener() {</span>
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                
+<span class="nc bnc" id="L71" title="All 2 branches missed.">                if (nameEntered) {</span>
+<span class="nc" id="L72">                    game.switchScreen(new LevelScreen(game));</span>
+<span class="nc" id="L73">                    playMenuClick();</span>
+                } else {
+<span class="nc" id="L75">                    MenuScreen.playerName = &quot;default&quot;;</span>
+<span class="nc" id="L76">                    game.switchScreen(new LevelScreen(game));</span>
+<span class="nc" id="L77">                    playMenuClick();</span>
+                }
+
+<span class="nc" id="L80">            }</span>
+        });
+
+<span class="nc" id="L83">        TextButton quitButton = new TextButton(&quot;Quit&quot;, buttonStyle);</span>
+<span class="nc" id="L84">        quitButton.addListener(new ClickListener() {</span>
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+<span class="nc" id="L87">                System.exit(0);</span>
+<span class="nc" id="L88">            }</span>
+        });
+
+	// CHANGED - build achievements:
+	// temporary fix to orient menu properly:
+<span class="nc" id="L93">	String achvData = &quot;Achievements:                            \n&quot;;</span>
+
+<span class="nc bnc" id="L95" title="All 2 branches missed.">	if (LeaderBoardSystem.readAchievements() != null) {</span>
+<span class="nc bnc" id="L96" title="All 2 branches missed.">		for (String entry : LeaderBoardSystem.readAchievements()) {</span>
+<span class="nc" id="L97">			achvData += entry + &quot;\n&quot;;</span>
+<span class="nc" id="L98">		}</span>
+	}
+
+<span class="nc" id="L101">	Label achievements = new Label(achvData, bodyStyle);</span>
+<span class="nc" id="L102">	outerTable.add(achievements).padRight(325).padLeft(200);</span>
+        
+        // vertical stack layout for elements in menu screen
+<span class="nc" id="L105">        innerTable.add(title).padBottom(20).row(); // e.g. title with 20px space below</span>
+<span class="nc" id="L106">        innerTable.add(subtitle).padBottom(40).row();</span>
+<span class="nc" id="L107">        innerTable.add(nameEntry).width(200).height(40).padBottom(10).row();</span>
+<span class="nc" id="L108">        innerTable.add(startButton).width(200).height(60).padBottom(10).row();</span>
+<span class="nc" id="L109">        innerTable.add(quitButton).width(200).height(60);</span>
+<span class="nc" id="L110">        innerTable.center();</span>
+
+<span class="nc" id="L112">        outerTable.add(innerTable);</span>
+
+        // Building Leaderboard
+
+        // Fetching data from file
+<span class="nc" id="L117">        String lbData = &quot;Top Scores:\n&quot;;</span>
+
+<span class="nc bnc" id="L119" title="All 2 branches missed.">        if (LeaderBoardSystem.readLeaderboard() != null) {</span>
+<span class="nc bnc" id="L120" title="All 2 branches missed.">            for (String entry : LeaderBoardSystem.readLeaderboard()) {</span>
+<span class="nc" id="L121">                lbData += entry +&quot;\n&quot;;</span>
+<span class="nc" id="L122">            }</span>
+        }
+        
+<span class="nc" id="L125">        Label leaderboard = new Label(lbData, bodyStyle);</span>
+<span class="nc" id="L126">        outerTable.add(leaderboard).expandX();</span>
+
+
+	// do @ end, regardless of other features
+<span class="nc" id="L130">	stage.addActor(outerTable);</span>
+<span class="nc" id="L131">	stage.setDebugAll(false);</span>
+<span class="nc" id="L132">    }</span>
+
+    @Override
+    protected float[] getBackgroundColor() {
+<span class="nc" id="L136">        return new float[]{0.1f, 0.1f, 0.2f, 1f}; // Dark blue</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

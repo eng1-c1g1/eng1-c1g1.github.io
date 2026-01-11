@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GooseComponent.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">headless</a> &gt; <a href="index.source.html" class="el_package">io.github.maze11.components</a> &gt; <span class="el_source">GooseComponent.java</span></div><h1>GooseComponent.java</h1><pre class="source lang-java linenums">package io.github.maze11.components;
+
+import com.badlogic.ashley.core.Component;
+import com.badlogic.gdx.math.Vector2;
+
+/**
+ * Represents a goose, which wanders aimlessly, but attacks the player if they get too close
+ */
+<span class="fc" id="L9">public class GooseComponent implements Component {</span>
+    /**
+     * The set of states that the goose can take.
+     * The behaviour of the goose is different in each state.
+     */
+<span class="fc" id="L14">    public enum GooseState {</span>
+<span class="fc" id="L15">        WANDER, CHASE, RETREAT</span>
+    }
+
+    /**
+     * The animations that the goose can play
+     */
+<span class="fc" id="L21">    public enum GooseAnimState {</span>
+<span class="fc" id="L22">        IDLE_UP,</span>
+<span class="fc" id="L23">        IDLE_RIGHT,</span>
+<span class="fc" id="L24">        IDLE_DOWN,</span>
+<span class="fc" id="L25">        IDLE_LEFT,</span>
+
+<span class="fc" id="L27">        WALK_UP,</span>
+<span class="fc" id="L28">        WALK_RIGHT,</span>
+<span class="fc" id="L29">        WALK_DOWN,</span>
+<span class="fc" id="L30">        WALK_LEFT</span>
+    }
+
+    /** The state machine state the goose is in */
+<span class="fc" id="L34">    public GooseState state = GooseState.WANDER;</span>
+<span class="fc" id="L35">    public GooseAnimState animState = GooseAnimState.IDLE_DOWN;</span>
+
+    /** The speed at which the goose moves while chasing the player */
+<span class="fc" id="L38">    public float chaseSpeed = 7f;</span>
+    /** The speed at which the goose moves while running from the player */
+<span class="fc" id="L40">    public float retreatSpeed = 7f;</span>
+    /** The speed at which the goose moves while wandering */
+<span class="fc" id="L42">    public float wanderSpeed =  2f;</span>
+
+    /** The maximum distance from the home position within which the goose chooses a point to wander towards */
+<span class="fc" id="L45">    public float wanderRadius = 3f;</span>
+    /** The distance to the wander destination below which the goose picks a new destination */
+<span class="fc" id="L47">    public float wanderAcceptDistance = 0.2f;</span>
+    /** The point towards which the goose wanders when in the wander state */
+    public Vector2 currentWanderWaypoint;
+
+    /** The distance to the target below which it begins chasing */
+<span class="fc" id="L52">    public float detectionRadius = 6f;</span>
+    /** If it is chasing and the target goes outside this radius, it stops chasing */
+<span class="fc" id="L54">    public float forgetRadius = 12f;</span>
+
+    /** The time the goose retreats for after biting the player */
+<span class="fc" id="L57">    public float retreatTime = 2f;</span>
+    /** How long the goose has been retreating for */
+    public float retreatTimeElapsed;
+    /** The position around which the goose idles */
+    public Vector2 homePosition;
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

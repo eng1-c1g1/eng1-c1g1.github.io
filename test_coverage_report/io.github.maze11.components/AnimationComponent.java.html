@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AnimationComponent.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">headless</a> &gt; <a href="index.source.html" class="el_package">io.github.maze11.components</a> &gt; <span class="el_source">AnimationComponent.java</span></div><h1>AnimationComponent.java</h1><pre class="source lang-java linenums">package io.github.maze11.components;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import com.badlogic.ashley.core.Component;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+
+/**
+ * Contains information that allows this entity to have animations.
+ * @param &lt;T&gt; An enum, each value of which represents the name of an animation this component contains.
+ */
+<span class="fc" id="L14">public class AnimationComponent&lt;T extends Enum&lt;T&gt;&gt; implements Component {</span>
+<span class="fc" id="L15">    public Map&lt;T, Animation&lt;TextureRegion&gt;&gt; animations = new HashMap&lt;&gt;();</span>
+    /** The current animation that this is in */
+    public T currentState;
+    /** The time since the start of the animation */
+<span class="fc" id="L19">    public float elapsed = 0f;</span>
+    /** The texture to use to render this object */
+    public TextureRegion currentFrame;
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

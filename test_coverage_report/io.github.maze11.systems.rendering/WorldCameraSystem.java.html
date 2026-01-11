@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>WorldCameraSystem.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">headless</a> &gt; <a href="index.source.html" class="el_package">io.github.maze11.systems.rendering</a> &gt; <span class="el_source">WorldCameraSystem.java</span></div><h1>WorldCameraSystem.java</h1><pre class="source lang-java linenums">package io.github.maze11.systems.rendering;
+
+import com.badlogic.ashley.core.ComponentMapper;
+import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.Family;
+import com.badlogic.ashley.systems.IteratingSystem;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
+import io.github.maze11.components.CameraFollowComponent;
+import io.github.maze11.components.TransformComponent;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class WorldCameraSystem extends IteratingSystem {
+    private OrthographicCamera camera;
+    private SpriteBatch batch;
+
+    /**
+     * Temporary list containing all the active target positions registered this frame
+     */
+<span class="nc" id="L23">    private List&lt;Vector2&gt; targetPositions = new ArrayList&lt;Vector2&gt;();</span>
+
+    private final ComponentMapper&lt;CameraFollowComponent&gt; cameraMapper;
+    private final ComponentMapper&lt;TransformComponent&gt; transformMapper;
+
+    public WorldCameraSystem(OrthographicCamera camera, SpriteBatch batch) {
+<span class="nc" id="L29">        super(Family.all(CameraFollowComponent.class, TransformComponent.class).get());</span>
+<span class="nc" id="L30">        cameraMapper = ComponentMapper.getFor(CameraFollowComponent.class);</span>
+<span class="nc" id="L31">        transformMapper = ComponentMapper.getFor(TransformComponent.class);</span>
+<span class="nc" id="L32">        this.batch = batch;</span>
+<span class="nc" id="L33">        setCamera(camera);</span>
+<span class="nc" id="L34">    }</span>
+
+    public void setCamera(OrthographicCamera camera) {
+<span class="nc" id="L37">        this.camera = camera;</span>
+<span class="nc" id="L38">    }</span>
+
+    @Override
+    public void update(float deltaTime) {
+<span class="nc" id="L42">        targetPositions.clear();</span>
+<span class="nc" id="L43">        super.update(deltaTime);</span>
+<span class="nc" id="L44">        calculateCameraPosition();</span>
+<span class="nc" id="L45">        camera.update();</span>
+<span class="nc" id="L46">        batch.setProjectionMatrix(camera.combined);</span>
+<span class="nc" id="L47">    }</span>
+
+    @Override
+    protected void processEntity(Entity entity, float deltaTime) {
+<span class="nc" id="L51">        CameraFollowComponent cameraComponent = cameraMapper.get(entity);</span>
+<span class="nc" id="L52">        TransformComponent transform = transformMapper.get(entity);</span>
+
+<span class="nc bnc" id="L54" title="All 2 branches missed.">        if (cameraComponent.active) {</span>
+            //adds the vectors and appends to targetPositions without modifying either
+<span class="nc" id="L56">            targetPositions.add(transform.position.cpy().add(cameraComponent.offset));</span>
+        }
+<span class="nc" id="L58">    }</span>
+
+    /**
+     * Determine the camera position based on the targets it follows
+     */
+    private void calculateCameraPosition() {
+<span class="nc" id="L64">        Vector2 position = new Vector2();</span>
+<span class="nc bnc" id="L65" title="All 2 branches missed.">        if (targetPositions.isEmpty()) {</span>
+<span class="nc" id="L66">            System.out.println(&quot;Warning: No active camera targets&quot;);</span>
+<span class="nc" id="L67">            return;</span>
+        }
+
+        // Sets the position to the average of the target positions
+<span class="nc bnc" id="L71" title="All 2 branches missed.">        for (Vector2 targetPosition : targetPositions) {</span>
+<span class="nc" id="L72">            position.add(targetPosition);</span>
+<span class="nc" id="L73">        }</span>
+<span class="nc" id="L74">        position.scl(1f / targetPositions.size());</span>
+
+        // Any additional logic such as screen shake goes here
+
+<span class="nc" id="L78">        camera.position.x = position.x;</span>
+<span class="nc" id="L79">        camera.position.y = position.y;</span>
+<span class="nc" id="L80">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

@@ -1,0 +1,357 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>LevelScreen.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">headless</a> &gt; <a href="index.source.html" class="el_package">io.github.maze11.screens</a> &gt; <span class="el_source">LevelScreen.java</span></div><h1>LevelScreen.java</h1><pre class="source lang-java linenums">package io.github.maze11.screens;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import com.badlogic.ashley.core.ComponentMapper;
+import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.EntityListener;
+import com.badlogic.ashley.core.EntitySystem;
+import com.badlogic.ashley.core.Family;
+import com.badlogic.ashley.core.PooledEngine;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.objects.RectangleMapObject;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.utils.Timer;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+
+import io.github.maze11.MazeGame;
+import io.github.maze11.assetLoading.AssetId;
+import io.github.maze11.components.PhysicsComponent;
+import io.github.maze11.factory.EntityMaker;
+import io.github.maze11.fixedStep.FixedStepper;
+import io.github.maze11.messages.MessagePublisher;
+import io.github.maze11.messages.PiCollectMessage;
+import io.github.maze11.messages.ToastMessage;
+import io.github.maze11.systems.AudioSystem;
+import io.github.maze11.systems.BullySystem;
+import io.github.maze11.systems.GooseSystem;
+import io.github.maze11.systems.HiddenWallSystem;
+import io.github.maze11.systems.InteractableSystem;
+import io.github.maze11.systems.PauseSystem;
+import io.github.maze11.systems.PlayerSystem;
+import io.github.maze11.systems.TimerSystem;
+import io.github.maze11.systems.gameState.GameStateSystem;
+import io.github.maze11.systems.physics.PhysicsSyncSystem;
+import io.github.maze11.systems.physics.PhysicsSystem;
+import io.github.maze11.systems.physics.PhysicsToTransformSystem;
+import io.github.maze11.systems.physics.SafeBodyDestroy;
+import io.github.maze11.systems.rendering.RenderingSystem;
+import io.github.maze11.systems.rendering.WorldCameraSystem;
+
+/**
+ * The screen displayed when the game is running.
+ * This is where the world and player can be seen, and most the time is spent by
+ * the player.
+ */
+public class LevelScreen implements Screen {
+    private final PooledEngine engine;
+
+    private final TiledMap map;
+    private final FitViewport viewport;
+    private final OrthographicCamera camera;
+
+    private final FixedStepper fixedStepper;
+    private final MessagePublisher messagePublisher;
+
+<span class="nc" id="L67">    private final boolean isDebugging = false;</span>
+    private MazeGame game;
+
+<span class="nc" id="L70">    public LevelScreen(MazeGame game) {</span>
+<span class="nc" id="L71">        this.game = game;</span>
+
+<span class="nc" id="L73">        camera = new OrthographicCamera();</span>
+<span class="nc" id="L74">        viewport = new FitViewport(16, 12, camera);</span>
+
+<span class="nc" id="L76">        map = game.getAssetLoader().get(AssetId.TILEMAP, TiledMap.class);</span>
+
+<span class="nc" id="L78">        engine = new PooledEngine();</span>
+<span class="nc" id="L79">        fixedStepper = new FixedStepper();</span>
+<span class="nc" id="L80">        messagePublisher = new MessagePublisher();</span>
+
+<span class="nc" id="L82">        EntityMaker entityMaker = new EntityMaker(engine, game);</span>
+
+<span class="nc" id="L84">        GooseSystem gooseSystem = new GooseSystem(fixedStepper, messagePublisher);</span>
+<span class="nc" id="L85">        RenderingSystem renderingSystem = new RenderingSystem(game, camera, map, messagePublisher);</span>
+
+        // Game conditions (win/lose) -&gt; Input -&gt; Sync &amp; Physics -&gt; render (for no input
+        // delay)
+<span class="nc" id="L89">        List&lt;EntitySystem&gt; systems = List.of(</span>
+                new GameStateSystem(messagePublisher, game, engine),
+                new InteractableSystem(messagePublisher, engine, entityMaker),
+                gooseSystem,
+                new BullySystem(fixedStepper, messagePublisher, engine),
+                new PlayerSystem(fixedStepper, messagePublisher, game),
+                new HiddenWallSystem(fixedStepper, messagePublisher),
+                new PhysicsSyncSystem(fixedStepper),
+                new PhysicsSystem(fixedStepper, messagePublisher),
+                new PhysicsToTransformSystem(fixedStepper),
+                new AudioSystem(engine, messagePublisher, game),
+<span class="nc" id="L100">                new WorldCameraSystem(camera, game.getBatch()),</span>
+                new TimerSystem(messagePublisher),
+                renderingSystem,
+                new PauseSystem(game, this));
+
+<span class="nc bnc" id="L105" title="All 2 branches missed.">        for (EntitySystem system : systems) {</span>
+<span class="nc" id="L106">            engine.addSystem(system);</span>
+<span class="nc" id="L107">        }</span>
+
+<span class="nc" id="L109">        PhysicsSystem physicsSystem = engine.getSystem(PhysicsSystem.class);</span>
+        if (isDebugging) {
+            World debugWorld = physicsSystem.getWorld();
+            renderingSystem.enableDebugging(debugWorld);
+        }
+
+<span class="nc" id="L115">        registerPhysicsCleanupListener();</span>
+
+<span class="nc" id="L117">        Map&lt;String, List&lt;Entity&gt;&gt; entities = extractEntities(entityMaker);</span>
+
+        // Extract player
+<span class="nc" id="L120">        Entity player = entities.getOrDefault(&quot;player&quot;, List.of()).stream().findFirst().orElse(null);</span>
+<span class="nc" id="L121">        gooseSystem.setTarget(player);</span>
+
+        // Create timer (5 minutes = 300 seconds)
+<span class="nc" id="L124">        entityMaker.makeTimer(300f);</span>
+
+<span class="nc" id="L126">        PiCollectMessage.numPis = 0;    // Reset Pi counter</span>
+
+<span class="nc" id="L128">        this.welcomeToasts(messagePublisher);</span>
+
+<span class="nc" id="L130">        System.out.println(&quot;Level Screen created.&quot;);</span>
+<span class="nc" id="L131">    }</span>
+
+    private void welcomeToasts(MessagePublisher messagePublisher) {
+
+<span class="nc" id="L135">        ToastMessage[] toasts = {</span>
+
+                new ToastMessage(&quot;Welcome to the maze! Use Arrow Keys\nor WASD to move and ESC to pause.&quot;, 10f),
+                new ToastMessage(&quot;Escape the maze as fast as possible\nand avoid the geese.&quot;, 10f),
+                new ToastMessage(&quot;Collect coffee for extra speed and\ncheck-in codes for extra points, good luck!&quot;, 5f),
+        };
+
+<span class="nc" id="L142">        float startDelay = 2f;</span>
+<span class="nc" id="L143">        float gap = 4f;</span>
+
+<span class="nc bnc" id="L145" title="All 2 branches missed.">        for (int i = 0; i &lt; toasts.length; i++) {</span>
+<span class="nc" id="L146">            final ToastMessage msg = toasts[i];</span>
+<span class="nc" id="L147">            float delay = startDelay + i * gap;</span>
+
+<span class="nc" id="L149">            Timer.schedule(new Timer.Task() {</span>
+                @Override
+                public void run() {
+<span class="nc" id="L152">                    messagePublisher.publish(msg);</span>
+<span class="nc" id="L153">                }</span>
+            }, delay);
+        }
+<span class="nc" id="L156">    }</span>
+
+    private Map&lt;String, List&lt;Entity&gt;&gt; extractEntities(EntityMaker entityMaker) {
+<span class="nc" id="L159">        int pixelsToUnit = MazeGame.PIXELS_TO_UNIT;</span>
+
+<span class="nc" id="L161">        Map&lt;String, List&lt;Entity&gt;&gt; groups = new HashMap&lt;&gt;();</span>
+
+        // Walls (Collisions layer)
+<span class="nc" id="L164">        var wallsLayer = map.getLayers().get(&quot;Collisions&quot;);</span>
+<span class="nc bnc" id="L165" title="All 2 branches missed.">        if (wallsLayer != null) {</span>
+<span class="nc bnc" id="L166" title="All 2 branches missed.">            for (MapObject obj : wallsLayer.getObjects()) {</span>
+<span class="nc bnc" id="L167" title="All 2 branches missed.">                if (obj instanceof RectangleMapObject rectObj) {</span>
+<span class="nc" id="L168">                    var rect = rectObj.getRectangle();</span>
+
+<span class="nc" id="L170">                    float x = rect.x / pixelsToUnit;</span>
+<span class="nc" id="L171">                    float y = rect.y / pixelsToUnit;</span>
+<span class="nc" id="L172">                    float w = rect.width / pixelsToUnit;</span>
+<span class="nc" id="L173">                    float h = rect.height / pixelsToUnit;</span>
+
+<span class="nc" id="L175">                    Entity wall = entityMaker.makeWall(x, y, w, h);</span>
+<span class="nc" id="L176">                    groups.computeIfAbsent(&quot;wall&quot;, k -&gt; new ArrayList&lt;&gt;()).add(wall);</span>
+                }
+<span class="nc" id="L178">            }</span>
+        }
+
+        // Game Entities (Entities layer)
+<span class="nc" id="L182">        var entitiesLayer = map.getLayers().get(&quot;Entities&quot;);</span>
+<span class="nc bnc" id="L183" title="All 2 branches missed.">        if (entitiesLayer != null) {</span>
+<span class="nc bnc" id="L184" title="All 2 branches missed.">            for (MapObject obj : entitiesLayer.getObjects()) {</span>
+<span class="nc bnc" id="L185" title="All 2 branches missed.">                if (!(obj instanceof RectangleMapObject rectObj))</span>
+                    continue;
+
+<span class="nc" id="L188">                var rect = rectObj.getRectangle();</span>
+<span class="nc" id="L189">                float x = rect.x / pixelsToUnit;</span>
+<span class="nc" id="L190">                float y = rect.y / pixelsToUnit;</span>
+
+<span class="nc" id="L192">                String type = obj.getProperties().get(&quot;type&quot;, String.class);</span>
+<span class="nc bnc" id="L193" title="All 2 branches missed.">                if (type == null)</span>
+<span class="nc" id="L194">                    continue;</span>
+
+                if (isDebugging) {
+                    System.out.println(&quot;=== Entity Properties ===&quot;);
+                    var props = obj.getProperties();
+
+                    var keys = props.getKeys();
+                    while (keys.hasNext()) {
+                        String key = keys.next();
+                        Object value = props.get(key);
+                        System.out.printf(&quot; • %-20s : %s%n&quot;, key, value);
+                    }
+                }
+
+<span class="nc bnc" id="L208" title="All 17 branches missed.">                Entity e = switch (type.toLowerCase()) {</span>
+<span class="nc" id="L209">                    case &quot;player&quot; -&gt; entityMaker.makePlayer(x, y);</span>
+<span class="nc" id="L210">                    case &quot;goose&quot; -&gt; entityMaker.makeGoose(x, y);</span>
+<span class="nc" id="L211">                    case &quot;coffee&quot; -&gt; entityMaker.makeCoffee(x, y);</span>
+<span class="nc" id="L212">                    case &quot;puddle&quot; -&gt; entityMaker.makePuddle(x, y);</span>
+<span class="nc" id="L213">                    case &quot;ankh&quot; -&gt; entityMaker.makeAnkh(x, y);</span>
+<span class="nc" id="L214">                    case &quot;longboi&quot; -&gt; entityMaker.makeLongBoi(x, y);</span>
+<span class="nc" id="L215">                    case &quot;check-in&quot; -&gt; entityMaker.makeCheckInCode(x, y);</span>
+                    //Time Loss Entity Map implementation
+<span class="nc" id="L217">                    case &quot;time-lost&quot; -&gt; entityMaker.makeTimeLoss(x, y);</span>
+                    case &quot;teleporter&quot; -&gt; {
+                        //Teleporter Entity Map implementation
+<span class="nc" id="L220">                        String position = obj.getProperties().get(&quot;position&quot;, String.class);</span>
+<span class="nc" id="L221">                        Vector2 targetPosition = parseVector2(position);</span>
+<span class="nc" id="L222">                        yield entityMaker.makeTeleportation(x, y, targetPosition);</span>
+                    }
+<span class="nc" id="L224">                    case &quot;exit&quot; -&gt; entityMaker.makeExit(x, y);</span>
+<span class="nc" id="L225">                    case &quot;bully&quot; -&gt; entityMaker.makeBully(x, y);</span>
+<span class="nc" id="L226">                    case &quot;bribe&quot; -&gt; entityMaker.makeBribe(x, y);</span>
+                    case &quot;pressure-plate&quot; -&gt; {
+<span class="nc" id="L228">                        String triggers = obj.getProperties().get(&quot;triggers&quot;, String.class);</span>
+<span class="nc" id="L229">                        yield entityMaker.makePressurePlate(x, y, triggers);</span>
+                    }
+                    case &quot;false-wall&quot; -&gt; {
+<span class="nc" id="L232">                        float w = rect.width / pixelsToUnit;</span>
+<span class="nc" id="L233">                        float h = rect.height / pixelsToUnit;</span>
+<span class="nc" id="L234">                        String triggeredBy = obj.getProperties().get(&quot;triggeredBy&quot;, String.class);</span>
+<span class="nc" id="L235">                        yield entityMaker.makeFalseWall(x, y, w, h, triggeredBy);</span>
+                    }
+                    case &quot;wall&quot; -&gt; {
+<span class="nc" id="L238">                        float w = rect.width / pixelsToUnit;</span>
+<span class="nc" id="L239">                        float h = rect.height / pixelsToUnit;</span>
+<span class="nc" id="L240">                        yield entityMaker.makeWall(x, y, w, h);</span>
+                    }
+<span class="nc" id="L242">                    case &quot;pi&quot; -&gt; entityMaker.makePi(x, y);</span>
+<span class="nc" id="L243">                    default -&gt; null;</span>
+                };
+
+<span class="nc bnc" id="L246" title="All 2 branches missed.">                if (e != null) {</span>
+<span class="nc" id="L247">                    groups.computeIfAbsent(type, k -&gt; new ArrayList&lt;&gt;()).add(e);</span>
+                }
+<span class="nc" id="L249">            }</span>
+        }
+
+<span class="nc" id="L252">        return groups;</span>
+    }
+
+    //Teleporter Coordinates Helper
+    private Vector2 parseVector2(String str) {
+<span class="nc bnc" id="L257" title="All 2 branches missed.">        if (str == null) return new Vector2(0, 0);</span>
+
+        // Expected format: &quot;10,20&quot; or &quot;10, 20&quot;
+<span class="nc" id="L260">        String[] parts = str.replace(&quot; &quot;, &quot;&quot;).split(&quot;,&quot;);</span>
+<span class="nc" id="L261">        float x = Float.parseFloat(parts[0]);</span>
+<span class="nc" id="L262">        float y = Float.parseFloat(parts[1]);</span>
+<span class="nc" id="L263">        return new Vector2(x, y);</span>
+    }
+
+    @Override
+    public void render(float deltaTime) {
+<span class="nc" id="L268">        ScreenUtils.clear(Color.BLACK);</span>
+
+<span class="nc" id="L270">        viewport.apply();</span>
+
+        // CHANGED: Added code to prevent updates if the game is paused, and
+        // switch screen once pause button is pressed.
+        // Checking if pause button has been pressed
+<span class="nc bnc" id="L275" title="All 2 branches missed.">        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {</span>
+<span class="nc bnc" id="L276" title="All 2 branches missed.">            if (!PauseSystem.gamePaused) {</span>
+<span class="nc" id="L277">                PauseSystem.pauseGame();</span>
+<span class="nc" id="L278">                game.switchScreen(new PauseScreen(game, this));</span>
+<span class="nc" id="L279">                System.out.println(&quot;Paused&quot;);</span>
+            }
+        }
+<span class="nc bnc" id="L282" title="All 2 branches missed.">        if (!PauseSystem.gamePaused) {</span>
+<span class="nc" id="L283">            fixedStepper.advanceSimulation(deltaTime);</span>
+        }
+
+<span class="nc" id="L286">        engine.update(deltaTime);</span>
+
+<span class="nc" id="L288">    }</span>
+
+    @Override
+    public void resize(int width, int height) {
+<span class="nc bnc" id="L292" title="All 4 branches missed.">        if (width == 0 || height == 0)</span>
+<span class="nc" id="L293">            return;</span>
+
+<span class="nc" id="L295">        viewport.update(width, height, true);</span>
+
+<span class="nc" id="L297">        RenderingSystem renderSys = engine.getSystem(RenderingSystem.class);</span>
+<span class="nc bnc" id="L298" title="All 2 branches missed.">        if (renderSys != null) {</span>
+<span class="nc" id="L299">            renderSys.resize(width, height);</span>
+        }
+<span class="nc" id="L301">    }</span>
+
+    @Override
+    public void show() {
+<span class="nc" id="L305">    }</span>
+
+    @Override
+    public void hide() {
+<span class="nc" id="L309">    }</span>
+
+    @Override
+    public void pause() {
+<span class="nc" id="L313">    }</span>
+
+    @Override
+    public void resume() {
+<span class="nc" id="L317">    }</span>
+
+    @Override
+    public void dispose() {
+<span class="nc" id="L321">        engine.removeAllEntities(); // Clean up entities first to trigger physics body removal</span>
+<span class="nc" id="L322">        var phys = engine.getSystem(PhysicsSystem.class);</span>
+<span class="nc" id="L323">        var audio = engine.getSystem(AudioSystem.class);</span>
+
+<span class="nc bnc" id="L325" title="All 2 branches missed.">        if (phys != null) {</span>
+<span class="nc" id="L326">            engine.removeSystem(phys);</span>
+        }
+<span class="nc bnc" id="L328" title="All 2 branches missed.">        if (audio != null) {</span>
+<span class="nc" id="L329">            audio.dispose();</span>
+        }
+
+<span class="nc" id="L332">        engine.removeAllEntities();</span>
+<span class="nc" id="L333">        System.out.println(&quot;Level screen disposed&quot;);</span>
+<span class="nc" id="L334">    }</span>
+
+    private void registerPhysicsCleanupListener() {
+<span class="nc" id="L337">        ComponentMapper&lt;PhysicsComponent&gt; physicsMapper = ComponentMapper.getFor(PhysicsComponent.class);</span>
+
+<span class="nc" id="L339">        engine.addEntityListener(</span>
+<span class="nc" id="L340">                Family.all(PhysicsComponent.class).get(),</span>
+<span class="nc" id="L341">                new EntityListener() {</span>
+                    @Override
+                    public void entityAdded(Entity e) {
+<span class="nc" id="L344">                    }</span>
+
+                    @Override
+                    public void entityRemoved(Entity e) {
+<span class="nc" id="L348">                        PhysicsComponent phys = physicsMapper.get(e);</span>
+<span class="nc bnc" id="L349" title="All 4 branches missed.">                        if (phys != null &amp;&amp; phys.body != null) {</span>
+<span class="nc" id="L350">                            SafeBodyDestroy.request(phys.body);</span>
+<span class="nc" id="L351">                            phys.body = null;</span>
+                        }
+<span class="nc" id="L353">                    }</span>
+                });
+<span class="nc" id="L355">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

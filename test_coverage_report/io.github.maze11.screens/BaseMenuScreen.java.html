@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BaseMenuScreen.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">headless</a> &gt; <a href="index.source.html" class="el_package">io.github.maze11.screens</a> &gt; <span class="el_source">BaseMenuScreen.java</span></div><h1>BaseMenuScreen.java</h1><pre class="source lang-java linenums">package io.github.maze11.screens;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import io.github.maze11.MazeGame;
+import io.github.maze11.assetLoading.AssetId;
+import io.github.maze11.ui.FontGenerator;
+
+/**
+ * Abstract base class for menu screens (MenuScreen, GameOverScreen, WinScreen).
+ * Handles common functionality: font generation, stage setup, viewport scaling.
+ * Reduces code duplication across menu screens.
+ */
+public abstract class BaseMenuScreen implements Screen {
+    protected final MazeGame game;
+    protected final Stage stage;
+    protected final Skin skin;
+    protected BitmapFont titleFont;
+    protected BitmapFont bodyFont;
+
+    /**
+     * Creates a base menu screen with scaled fonts and viewport.
+     */
+<span class="nc" id="L31">    public BaseMenuScreen(MazeGame game) {</span>
+<span class="nc" id="L32">        this.game = game;</span>
+<span class="nc" id="L33">        this.stage = new Stage(new ScreenViewport());</span>
+<span class="nc" id="L34">        this.skin = new Skin(Gdx.files.internal(&quot;ui/uiskin.json&quot;));</span>
+
+        // Generate scaled fonts
+<span class="nc" id="L37">        this.titleFont = FontGenerator.generateRobotoFont(72, Color.WHITE, skin);</span>
+<span class="nc" id="L38">        this.bodyFont = FontGenerator.generateRobotoFont(28, Color.WHITE, skin);</span>
+
+<span class="nc" id="L40">        Gdx.input.setInputProcessor(stage);</span>
+        // Edited: should not build UI in this method, since the derived constructor needs to conclude first
+<span class="nc" id="L42">    }</span>
+
+    /**
+     * Builds the UI elements for this screen.
+     */
+    protected abstract void buildUI();
+
+    /**
+     * Gets the background color for this screen.
+     */
+    protected abstract float[] getBackgroundColor();
+
+    @Override
+    public void render(float delta) {
+<span class="nc" id="L56">        float[] bgColor = getBackgroundColor();</span>
+<span class="nc" id="L57">        Gdx.gl.glClearColor(bgColor[0], bgColor[1], bgColor[2], bgColor[3]);</span>
+<span class="nc" id="L58">        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);</span>
+
+<span class="nc" id="L60">        stage.act(delta);</span>
+<span class="nc" id="L61">        stage.draw();</span>
+<span class="nc" id="L62">    }</span>
+
+    @Override
+    public void resize(int width, int height) {
+<span class="nc" id="L66">        stage.getViewport().update(width, height, true);</span>
+
+        // Regenerate fonts for new screen size
+<span class="nc bnc" id="L69" title="All 2 branches missed.">        if (titleFont != null) titleFont.dispose();</span>
+<span class="nc bnc" id="L70" title="All 2 branches missed.">        if (bodyFont != null) bodyFont.dispose();</span>
+
+<span class="nc" id="L72">        titleFont = FontGenerator.generateRobotoFont(72, Color.WHITE, skin);</span>
+<span class="nc" id="L73">        bodyFont = FontGenerator.generateRobotoFont(28, Color.WHITE, skin);</span>
+
+        // Rebuild UI with new fonts
+<span class="nc" id="L76">        stage.clear();</span>
+<span class="nc" id="L77">        buildUI();</span>
+<span class="nc" id="L78">    }</span>
+
+    @Override
+<span class="nc" id="L81">    public void show() {}</span>
+
+    @Override
+<span class="nc" id="L84">    public void pause() {}</span>
+
+    @Override
+<span class="nc" id="L87">    public void resume() {}</span>
+
+    @Override
+<span class="nc" id="L90">    public void hide() {}</span>
+
+    @Override
+    public void dispose() {
+<span class="nc bnc" id="L94" title="All 2 branches missed.">        if (stage != null) stage.dispose();</span>
+<span class="nc bnc" id="L95" title="All 2 branches missed.">        if (skin != null) skin.dispose();</span>
+<span class="nc bnc" id="L96" title="All 2 branches missed.">        if (titleFont != null) titleFont.dispose();</span>
+<span class="nc bnc" id="L97" title="All 2 branches missed.">        if (bodyFont != null) bodyFont.dispose();</span>
+<span class="nc" id="L98">        System.out.println(this.getClass().getSimpleName() + &quot; disposed&quot;);</span>
+<span class="nc" id="L99">    }</span>
+
+    protected void playMenuClick(){
+<span class="nc" id="L102">        game.getAssetLoader().get(AssetId.SCREEN_BUTTON, Sound.class).play();</span>
+<span class="nc" id="L103">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BullyComponent.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">headless</a> &gt; <a href="index.source.html" class="el_package">io.github.maze11.components</a> &gt; <span class="el_source">BullyComponent.java</span></div><h1>BullyComponent.java</h1><pre class="source lang-java linenums">package io.github.maze11.components;
+
+import com.badlogic.ashley.core.Component;
+import com.badlogic.gdx.math.Vector2;
+
+/**
+ * Represents a bully, which blocks the player until they are given an item
+ */
+
+<span class="fc" id="L10">public class BullyComponent implements Component {</span>
+
+    /**
+     * The set of states that the bully can be in.
+     */
+
+<span class="fc" id="L16">    public enum BullyState {</span>
+<span class="fc" id="L17">        BLOCKING, WARNING, UNLOCKED, MOVE, DONE</span>
+    }
+
+    /**
+     * The animations that the bully can play
+     */
+
+<span class="fc" id="L24">    public enum BullyAnimState {</span>
+<span class="fc" id="L25">        IDLE_UP,</span>
+<span class="fc" id="L26">        IDLE_RIGHT,</span>
+<span class="fc" id="L27">        IDLE_DOWN,</span>
+<span class="fc" id="L28">        IDLE_LEFT,</span>
+
+<span class="fc" id="L30">        WALK_UP,</span>
+<span class="fc" id="L31">        WALK_RIGHT,</span>
+<span class="fc" id="L32">        WALK_DOWN,</span>
+<span class="fc" id="L33">        WALK_LEFT</span>
+    }
+
+    // Sets default settings for the bully
+<span class="fc" id="L37">    public BullyState state = BullyState.BLOCKING;</span>
+<span class="fc" id="L38">    public BullyAnimState animState = BullyAnimState.IDLE_DOWN;</span>
+<span class="fc" id="L39">    public float moveSpeed = 2f;</span>
+    // Creates a vector which is used for the bullies end position
+<span class="fc" id="L41">    public Vector2 targetPosition = new Vector2();</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

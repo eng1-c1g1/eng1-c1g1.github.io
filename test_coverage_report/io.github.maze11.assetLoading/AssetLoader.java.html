@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AssetLoader.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">headless</a> &gt; <a href="index.source.html" class="el_package">io.github.maze11.assetLoading</a> &gt; <span class="el_source">AssetLoader.java</span></div><h1>AssetLoader.java</h1><pre class="source lang-java linenums">package io.github.maze11.assetLoading;
+
+import java.util.HashMap;
+
+import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
+import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+
+/**
+ * Manages all assets using symbolic identifiers instead of hard-coding addresses.
+ * This is to prevent the need to duplicate address data across the code and lead to unmaintainable code
+ */
+public class AssetLoader {
+    private final AssetManager assetManager;
+    private final HashMap&lt;AssetKey&lt;?&gt;, String&gt; assetMap;
+
+<span class="nc" id="L20">    public AssetLoader() {</span>
+<span class="nc" id="L21">        assetManager = new AssetManager();</span>
+
+<span class="nc" id="L23">        assetMap = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L24">        assetMap.putAll(AssetPaths.pathsWithTypes);</span>
+
+        // Puts all the texture paths into the map
+<span class="nc bnc" id="L27" title="All 2 branches missed.">        for (var entry : AssetPaths.texturePaths.entrySet()) {</span>
+<span class="nc" id="L28">            assetMap.put(new AssetKey&lt;&gt;(entry.getKey(), Texture.class), entry.getValue());</span>
+<span class="nc" id="L29">        }</span>
+
+        // Add audio to our assets
+<span class="nc bnc" id="L32" title="All 2 branches missed.">        for (var entry : AssetPaths.soundPaths.entrySet()) {</span>
+<span class="nc" id="L33">            assetMap.put(new AssetKey&lt;&gt;(entry.getKey(), Sound.class), entry.getValue());</span>
+<span class="nc" id="L34">        }</span>
+<span class="nc" id="L35">    }</span>
+
+    /**
+     * Loads all the assets into memory. This should be done before the AssetLoader is used
+     */
+    public void load(){
+<span class="nc" id="L41">        assetManager.setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));</span>
+<span class="nc bnc" id="L42" title="All 2 branches missed.">        for (var asset : assetMap.entrySet()){</span>
+<span class="nc" id="L43">                assetManager.load(asset.getValue(), (Class&lt;?&gt;) asset.getKey().assetType());</span>
+<span class="nc" id="L44">        }</span>
+<span class="nc" id="L45">        assetManager.finishLoading();</span>
+<span class="nc" id="L46">    }</span>
+
+    public &lt;T&gt; T get (AssetId id, Class&lt;T&gt; type) {
+<span class="nc" id="L49">        return assetManager.get(assetMap.get(new AssetKey&lt;&gt;(id, type)), type);</span>
+    }
+
+    /**
+     * Unloads all assets
+     */
+    public void dispose(){
+<span class="nc" id="L56">        assetManager.dispose();</span>
+<span class="nc" id="L57">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

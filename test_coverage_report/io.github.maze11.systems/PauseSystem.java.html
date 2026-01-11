@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PauseSystem.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">headless</a> &gt; <a href="index.source.html" class="el_package">io.github.maze11.systems</a> &gt; <span class="el_source">PauseSystem.java</span></div><h1>PauseSystem.java</h1><pre class="source lang-java linenums">package io.github.maze11.systems;
+
+import com.badlogic.ashley.core.EntitySystem;
+import com.badlogic.gdx.Screen;
+
+import io.github.maze11.MazeGame;
+import io.github.maze11.screens.PauseScreen;
+
+// CHANGED: Created PauseSystem class
+public class PauseSystem extends EntitySystem {
+
+<span class="fc" id="L12">    public static Boolean gamePaused = false;</span>
+    static Screen pauseScreen;
+    static Screen levelScreen;
+
+<span class="nc" id="L16">    public PauseSystem(MazeGame game, Screen prevScreen) {</span>
+<span class="nc" id="L17">        pauseScreen = new PauseScreen(game, prevScreen);</span>
+<span class="nc" id="L18">    }</span>
+
+    public static void pauseGame() {
+<span class="fc" id="L21">        gamePaused = true;        </span>
+<span class="fc" id="L22">    }</span>
+
+    public static void unpauseGame() {
+<span class="fc" id="L25">        gamePaused = false;</span>
+<span class="fc" id="L26">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

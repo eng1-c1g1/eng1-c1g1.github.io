@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>IteratingFixedStepSystem.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">headless</a> &gt; <a href="index.source.html" class="el_package">io.github.maze11.fixedStep</a> &gt; <span class="el_source">IteratingFixedStepSystem.java</span></div><h1>IteratingFixedStepSystem.java</h1><pre class="source lang-java linenums">package io.github.maze11.fixedStep;
+
+import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.Family;
+import com.badlogic.ashley.systems.IteratingSystem;
+
+/**
+ * An iterating system that subscribes to fixedUpdate callbacks
+ */
+public abstract class IteratingFixedStepSystem extends IteratingSystem implements FixedUpdateListener {
+
+    public IteratingFixedStepSystem(FixedStepper stepper, Family family) {
+<span class="fc" id="L13">        super(family);</span>
+<span class="fc" id="L14">        stepper.addListener(this);</span>
+<span class="fc" id="L15">    }</span>
+
+    public void fixedUpdate(float deltaTime) {
+<span class="fc bfc" id="L18" title="All 2 branches covered.">        for (Entity entity : getEntities()) {</span>
+<span class="fc" id="L19">            fixedStepProcessEntity(entity, deltaTime);</span>
+<span class="fc" id="L20">        }</span>
+<span class="fc" id="L21">    }</span>
+
+    // Create empty override so that defining this method in derived classes is not essential
+    @Override
+<span class="fc" id="L25">    protected void processEntity(Entity entity, float deltaTime) { }</span>
+
+    protected abstract void fixedStepProcessEntity(Entity entity, float deltaTime);
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

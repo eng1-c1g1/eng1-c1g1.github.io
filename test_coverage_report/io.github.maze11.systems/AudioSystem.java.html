@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AudioSystem.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">headless</a> &gt; <a href="index.source.html" class="el_package">io.github.maze11.systems</a> &gt; <span class="el_source">AudioSystem.java</span></div><h1>AudioSystem.java</h1><pre class="source lang-java linenums">package io.github.maze11.systems;
+
+import com.badlogic.ashley.core.*;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.math.RandomXS128;
+import com.badlogic.gdx.math.Vector2;
+import io.github.maze11.MazeGame;
+import io.github.maze11.assetLoading.AssetId;
+import io.github.maze11.components.AudioListenerComponent;
+import io.github.maze11.components.TransformComponent;
+import io.github.maze11.messages.*;
+
+/**
+ * Plays any sound effects from their corresponding messages
+ */
+public class AudioSystem extends EntitySystem {
+
+    private final Engine engine;
+    private final MessageListener messageListener;
+<span class="nc" id="L20">    private final ComponentMapper&lt;AudioListenerComponent&gt; listenerMapper = ComponentMapper.getFor(AudioListenerComponent.class);</span>
+<span class="nc" id="L21">    private final ComponentMapper&lt;TransformComponent&gt; transformMapper = ComponentMapper.getFor(TransformComponent.class);</span>
+<span class="nc" id="L22">    private final RandomXS128 random = new RandomXS128();</span>
+    private final Music music;
+
+<span class="nc" id="L25">    public AudioSystem(Engine engine, MessagePublisher messagePublisher, MazeGame game) {</span>
+<span class="nc" id="L26">        this.engine = engine;</span>
+<span class="nc" id="L27">        this.messageListener = new MessageListener(messagePublisher);</span>
+<span class="nc" id="L28">        music = game.getAssetLoader().get(AssetId.GAME_MUSIC, Music.class);</span>
+<span class="nc" id="L29">        music.setLooping(true);</span>
+<span class="nc" id="L30">        music.setVolume(0.5f);</span>
+<span class="nc" id="L31">        music.play();</span>
+<span class="nc" id="L32">    }</span>
+
+    @Override
+    public void update(float deltaTime) {
+
+        // Find the position of the listener
+<span class="nc" id="L38">        var listeners = engine.getEntitiesFor(Family.all(AudioListenerComponent.class).get());</span>
+<span class="nc bnc" id="L39" title="All 2 branches missed.">        if (listeners.size() != 1) {</span>
+<span class="nc" id="L40">            throw new RuntimeException(&quot;There must be exactly one AudioListenerComponent&quot;);</span>
+        }
+        // CHANGED: Don't update sounds while paused
+<span class="nc bnc" id="L43" title="All 2 branches missed.">        if (!PauseSystem.gamePaused) {</span>
+<span class="nc" id="L44">            Entity listener = listeners.get(0);</span>
+<span class="nc" id="L45">            Vector2 listenPosition = new Vector2(transformMapper.get(listener).position);</span>
+<span class="nc" id="L46">            listenPosition.add(listenerMapper.get(listener).offset);</span>
+
+            // Play all the newly arrived sound effects
+<span class="nc bnc" id="L49" title="All 2 branches missed.">            while (messageListener.hasNext()){</span>
+<span class="nc" id="L50">                Message message = messageListener.next();</span>
+<span class="nc bnc" id="L51" title="All 2 branches missed.">                if (message.type == MessageType.SOUND_EFFECT) {</span>
+<span class="nc" id="L52">                    playSound((SoundMessage)  message, listenPosition);</span>
+                }
+<span class="nc" id="L54">            }</span>
+        }
+        
+<span class="nc" id="L57">    }</span>
+
+    /**
+     * Reads SoundMessages sent to it, plays sounds corresponding to them
+     */
+    private void playSound(SoundMessage message, Vector2 listenerPosition){
+
+<span class="nc" id="L64">        float volume = message.getEffectiveVolume(listenerPosition);</span>
+        float resultantPitch;
+
+        // Pick a random pitch for the sound
+<span class="nc" id="L68">        float pitchRandomness = message.pitchRandomness;</span>
+<span class="nc bnc" id="L69" title="All 2 branches missed.">        if (pitchRandomness == 0f) {</span>
+<span class="nc" id="L70">            resultantPitch = 1f;</span>
+        }
+        else {
+            // Get even pitch distribution for higher and lower pitch
+<span class="nc" id="L74">            float randVal = random.nextFloat() * 2 - 1;</span>
+<span class="nc" id="L75">            randVal *= pitchRandomness;</span>
+<span class="nc" id="L76">            resultantPitch = (float)Math.pow(2f, randVal);</span>
+        }
+
+
+<span class="nc" id="L80">        message.sound.play(volume, resultantPitch, 0f);</span>
+<span class="nc" id="L81">    }</span>
+
+    public void dispose(){
+<span class="nc" id="L84">        music.stop();</span>
+<span class="nc" id="L85">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

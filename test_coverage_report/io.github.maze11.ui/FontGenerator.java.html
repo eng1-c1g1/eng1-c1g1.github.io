@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>FontGenerator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">headless</a> &gt; <a href="index.source.html" class="el_package">io.github.maze11.ui</a> &gt; <span class="el_source">FontGenerator.java</span></div><h1>FontGenerator.java</h1><pre class="source lang-java linenums">package io.github.maze11.ui;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+
+/**
+ * Utility class for generating Roboto fonts for UI screens.
+ * Reduces code duplication across MenuScreen, GameOverScreen, and WinScreen.
+ * Fonts scale proportionally with screen height for responsive UI.
+ */
+<span class="nc" id="L15">public class FontGenerator {</span>
+    
+    /**
+     * Generates a Roboto font with the specified size and color, scaled to screen height.
+     */
+    public static BitmapFont generateRobotoFont(int baseSize, Color color, Skin fallbackSkin) {
+        try {
+<span class="nc" id="L22">            FreeTypeFontGenerator generator = new FreeTypeFontGenerator(</span>
+<span class="nc" id="L23">                Gdx.files.internal(&quot;fonts/Roboto-Regular.ttf&quot;)</span>
+            );
+            // Scale font size based on screen height
+<span class="nc" id="L26">            float scaleFactor = Gdx.graphics.getHeight() / 1080f; // Reference height of 1080p</span>
+<span class="nc" id="L27">            int scaledSize = Math.max(12, (int)(baseSize * scaleFactor)); //12px minimum size</span>
+            
+<span class="nc" id="L29">            FreeTypeFontParameter param = new FreeTypeFontParameter();</span>
+<span class="nc" id="L30">            param.size = scaledSize;</span>
+<span class="nc" id="L31">            param.color = color;</span>
+            
+<span class="nc" id="L33">            BitmapFont font = generator.generateFont(param);</span>
+<span class="nc" id="L34">            generator.dispose();</span>
+            
+<span class="nc" id="L36">            return font;</span>
+<span class="nc" id="L37">        } catch (Exception e) {</span>
+<span class="nc" id="L38">            System.err.println(&quot;Failed to load Roboto font (size &quot; + baseSize + &quot;), using default&quot;);</span>
+<span class="nc" id="L39">            e.printStackTrace();</span>
+<span class="nc" id="L40">            return fallbackSkin.getFont(&quot;default-font&quot;);</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

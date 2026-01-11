@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TimerSystem.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">headless</a> &gt; <a href="index.source.html" class="el_package">io.github.maze11.systems</a> &gt; <span class="el_source">TimerSystem.java</span></div><h1>TimerSystem.java</h1><pre class="source lang-java linenums">package io.github.maze11.systems;
+
+import com.badlogic.ashley.core.*;
+import com.badlogic.ashley.systems.IteratingSystem;
+import io.github.maze11.components.TimerComponent;
+import io.github.maze11.messages.*;
+
+/**
+ * Updates countdown timers.
+ * Sends a message when a timer expires.
+ */
+public class TimerSystem extends IteratingSystem {
+<span class="fc" id="L13">    private final ComponentMapper&lt;TimerComponent&gt; timerM = ComponentMapper.getFor(TimerComponent.class);</span>
+    private final MessagePublisher messagePublisher;
+    private final MessageListener messageListener;
+
+    // constructor to define the family of entities this system will process
+    public TimerSystem(MessagePublisher messagePublisher) {
+<span class="fc" id="L19">        super(Family.all(TimerComponent.class).get());</span>
+<span class="fc" id="L20">        this.messageListener = new MessageListener(messagePublisher);</span>
+<span class="fc" id="L21">        this.messagePublisher = messagePublisher;</span>
+<span class="fc" id="L22">    }</span>
+
+    @Override
+    public void processEntity(Entity entity, float deltaTime) {
+<span class="fc" id="L26">        TimerComponent timer = timerM.get(entity); // get the timer component for the entity</span>
+
+        // CHANGED: Made it so no entity updates occur when paused.
+        // if the timer is not running or has expired, or the game is paused do nothing
+<span class="pc bpc" id="L30" title="2 of 6 branches missed.">        if (!timer.isRunning || timer.hasExpired || PauseSystem.gamePaused) {</span>
+<span class="fc" id="L31">            return;</span>
+        }
+
+<span class="fc bfc" id="L34" title="All 2 branches covered.">        while (messageListener.hasNext()) {</span>
+<span class="fc" id="L35">            var message = messageListener.next();</span>
+
+<span class="fc bfc" id="L37" title="All 2 branches covered.">            if (message.type == MessageType.TIME_LOST) {</span>
+<span class="fc" id="L38">                timer.timeRemaining -= 50f;</span>
+            }
+<span class="fc" id="L40">        }</span>
+
+        // decrease the remaining time by the delta time (time since last frame)
+<span class="fc" id="L43">        timer.timeRemaining -= deltaTime;</span>
+
+        // check if timer has expired
+<span class="fc bfc" id="L46" title="All 2 branches covered.">        if (timer.timeRemaining &lt;= 0) {</span>
+<span class="fc" id="L47">            timer.timeRemaining = 0; // set to 0</span>
+<span class="fc" id="L48">            timer.hasExpired = true; // mark as expired</span>
+
+            // publish timer expired message for other systems to react to
+<span class="fc" id="L51">            messagePublisher.publish(new Message(MessageType.TIMER_EXPIRED));</span>
+<span class="fc" id="L52">            System.out.println(&quot;Timer expired! Publishing TimerExpiredMessage...&quot;); // log expiration</span>
+        }
+<span class="fc" id="L54">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

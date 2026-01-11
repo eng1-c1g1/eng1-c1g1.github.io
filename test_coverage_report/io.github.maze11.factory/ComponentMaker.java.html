@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ComponentMaker.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">headless</a> &gt; <a href="index.source.html" class="el_package">io.github.maze11.factory</a> &gt; <span class="el_source">ComponentMaker.java</span></div><h1>ComponentMaker.java</h1><pre class="source lang-java linenums">package io.github.maze11.factory;
+
+import com.badlogic.ashley.core.Engine;
+import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.*;
+
+import io.github.maze11.MazeGame;
+import io.github.maze11.assetLoading.AssetId;
+import io.github.maze11.assetLoading.AssetLoader;
+import io.github.maze11.components.*;
+import io.github.maze11.messages.InteractableMessage;
+import io.github.maze11.messages.Message;
+import io.github.maze11.systems.physics.PhysicsSystem;
+
+import java.util.List;
+
+/**
+ * Used by EntityMaker to add components to entities
+ */
+class ComponentMaker {
+
+    private final Engine engine;
+    private final AssetLoader assetLoader;
+
+<span class="fc" id="L27">    ComponentMaker (Engine engine, AssetLoader assetLoader) {</span>
+<span class="fc" id="L28">        this.engine = engine;</span>
+<span class="fc" id="L29">        this.assetLoader = assetLoader;</span>
+<span class="fc" id="L30">    }</span>
+
+    void addTransform(Entity entity, float x, float y, float xScale, float yScale) {
+<span class="fc" id="L33">        TransformComponent transform = engine.createComponent(TransformComponent.class);</span>
+<span class="fc" id="L34">        transform.Initialize(x, y, xScale, yScale);</span>
+<span class="fc" id="L35">        entity.add(transform);</span>
+<span class="fc" id="L36">    }</span>
+
+    void addTransform(Entity entity, float x, float y) {
+<span class="fc" id="L39">        addTransform(entity, x, y, 1f, 1f);</span>
+<span class="fc" id="L40">    }</span>
+
+    void addSprite(Entity entity, AssetId textureId) {
+<span class="fc" id="L43">        addSprite(entity, textureId, 1f, 1f, 0f, 0f);</span>
+<span class="fc" id="L44">    }</span>
+
+    void addSprite(Entity entity, AssetId textureId, float sizeX, float sizeY, float textureOffsetX, float textureOffsetY) {
+        
+        // If no sprite batch fetched (e.g. if a headless test is being ran), don't add a sprite
+<span class="pc bpc" id="L49" title="1 of 2 branches missed.">        if (MazeGame.batch == null) {</span>
+<span class="fc" id="L50">            return;</span>
+        }
+
+<span class="nc" id="L53">        SpriteComponent sprite = engine.createComponent(SpriteComponent.class);</span>
+
+        //If texture not provided, it should be null
+<span class="nc bnc" id="L56" title="All 2 branches missed.">        if (textureId != null) {</span>
+<span class="nc" id="L57">            sprite.texture = assetLoader.get(textureId, Texture.class);</span>
+        }
+
+<span class="nc" id="L60">        sprite.size.set(sizeX, sizeY);</span>
+<span class="nc" id="L61">        sprite.textureOffset.set(textureOffsetX, textureOffsetY);</span>
+
+<span class="nc" id="L63">        entity.add(sprite);</span>
+<span class="nc" id="L64">    }</span>
+
+    void addInteractable(Entity entity, InteractableMessage message, boolean disappearOnInteract, List&lt;Message&gt; additionalMessages) {
+<span class="fc" id="L67">        var interactableComponent = new InteractableComponent();</span>
+<span class="fc" id="L68">        interactableComponent.activationMessage = message;</span>
+
+<span class="fc bfc" id="L70" title="All 2 branches covered.">        if (additionalMessages != null) {</span>
+<span class="fc" id="L71">            interactableComponent.additionalMessages = additionalMessages;</span>
+        }
+<span class="fc" id="L73">        interactableComponent.disappearOnInteract = disappearOnInteract;</span>
+<span class="fc" id="L74">        interactableComponent.interactionEnabled = true;</span>
+<span class="fc" id="L75">        entity.add(interactableComponent);</span>
+<span class="fc" id="L76">    }</span>
+
+    void addBoxCollider(Entity entity, float x, float y,
+                                float width, float height,
+                                float offsetX, float offsetY,
+                                BodyDef.BodyType bodyType,
+                                boolean fixedRotation) {
+<span class="fc" id="L83">        PhysicsComponent physics = engine.createComponent(PhysicsComponent.class);</span>
+<span class="fc" id="L84">        physics.setBox(width, height, offsetX, offsetY);</span>
+
+<span class="fc" id="L86">        var world = engine.getSystem(PhysicsSystem.class).getWorld();</span>
+<span class="fc" id="L87">        physics.body = createPhysicsBody(entity, world, physics, x, y, bodyType, fixedRotation, 0f);</span>
+
+<span class="fc" id="L89">        entity.add(physics);</span>
+<span class="fc" id="L90">    }</span>
+
+    void addCircleCollider(Entity entity, float x, float y,
+                                   float radius, float xOffset, float yOffset,
+                                   BodyDef.BodyType bodyType) {
+<span class="fc" id="L95">        PhysicsComponent physics = engine.createComponent(PhysicsComponent.class);</span>
+<span class="fc" id="L96">        physics.setCircle(radius, xOffset, yOffset);</span>
+
+<span class="fc" id="L98">        var world = engine.getSystem(PhysicsSystem.class).getWorld();</span>
+<span class="fc" id="L99">        physics.body = createPhysicsBody(entity, world, physics, x, y, bodyType, false, 0f);</span>
+
+<span class="fc" id="L101">        entity.add(physics);</span>
+<span class="fc" id="L102">    }</span>
+
+    // Helper method to create physics body based on PhysicsComponent settings
+    private Body createPhysicsBody(Entity entity, World world, PhysicsComponent physics,
+                                   float x, float y,
+                                   BodyDef.BodyType type,
+                                   boolean fixedRotation,
+                                   float linearDamping) {
+        // Create body
+<span class="fc" id="L111">        BodyDef bodyDef = new BodyDef();</span>
+<span class="fc" id="L112">        bodyDef.type = type;</span>
+<span class="fc" id="L113">        bodyDef.position.set(x, y);</span>
+<span class="fc" id="L114">        bodyDef.fixedRotation = fixedRotation;</span>
+<span class="fc" id="L115">        bodyDef.linearDamping = linearDamping;</span>
+<span class="fc" id="L116">        Body body = world.createBody(bodyDef);</span>
+
+        // Create shape based on collider type
+        Shape shape;
+<span class="fc bfc" id="L120" title="All 2 branches covered.">        if (physics.getColliderType() == PhysicsComponent.ColliderType.CIRCLE) {</span>
+            // Create circle shape
+<span class="fc" id="L122">            CircleShape circle = new CircleShape();</span>
+<span class="fc" id="L123">            circle.setRadius(physics.getColliderRadius());</span>
+<span class="fc" id="L124">            circle.setPosition(physics.getColliderOffset());</span>
+<span class="fc" id="L125">            shape = circle;</span>
+<span class="fc" id="L126">        } else {</span>
+            // Create box shape
+<span class="fc" id="L128">            PolygonShape box = new PolygonShape();</span>
+<span class="fc" id="L129">            box.setAsBox(</span>
+<span class="fc" id="L130">                physics.getColliderWidth() / 2f,</span>
+<span class="fc" id="L131">                physics.getColliderHeight() / 2f,</span>
+<span class="fc" id="L132">                physics.getColliderOffset(),</span>
+                0f);
+<span class="fc" id="L134">            shape = box;</span>
+        }
+
+        // Create fixture
+<span class="fc" id="L138">        FixtureDef fixtureDef = new FixtureDef();</span>
+<span class="fc" id="L139">        fixtureDef.shape = shape;</span>
+<span class="fc" id="L140">        fixtureDef.density = 1.0f;</span>
+<span class="fc" id="L141">        fixtureDef.friction = 0.3f;</span>
+<span class="fc" id="L142">        fixtureDef.restitution = 0.0f;</span>
+
+<span class="fc" id="L144">        var fixture = body.createFixture(fixtureDef);</span>
+
+        // Make the entity the user data so that the game can track which objects
+        // collide with which
+<span class="fc" id="L148">        fixture.setUserData(entity);</span>
+
+<span class="fc" id="L150">        shape.dispose();</span>
+
+<span class="fc" id="L152">        return body;</span>
+    }
+
+    void addTimer(Entity entity, float durationSeconds) {
+<span class="fc" id="L156">        TimerComponent timer = engine.createComponent(TimerComponent.class);</span>
+<span class="fc" id="L157">        timer.timeRemaining = durationSeconds;</span>
+<span class="fc" id="L158">        timer.totalTime = durationSeconds;</span>
+<span class="fc" id="L159">        timer.isRunning = true;</span>
+<span class="fc" id="L160">        timer.hasExpired = false;</span>
+<span class="fc" id="L161">        entity.add(timer);</span>
+<span class="fc" id="L162">    }</span>
+
+    void addHiddenWall(Entity entity, String triggeredBy){
+<span class="fc" id="L165">        HiddenWallComponent hiddenWall = engine.createComponent(HiddenWallComponent.class);</span>
+<span class="fc" id="L166">        hiddenWall.triggeredBy = triggeredBy;</span>
+<span class="fc" id="L167">        entity.add(hiddenWall);</span>
+<span class="fc" id="L168">    }</span>
+
+    void addGoose(Entity entity, float x, float y){
+<span class="fc" id="L171">        GooseComponent goose = engine.createComponent(GooseComponent.class);</span>
+<span class="fc" id="L172">        goose.homePosition = new Vector2(x, y);</span>
+<span class="fc" id="L173">        goose.currentWanderWaypoint = null;</span>
+<span class="fc" id="L174">        entity.add(goose);</span>
+<span class="fc" id="L175">    }</span>
+
+    void addAudioListener(Entity entity, Vector2 offset){
+<span class="fc" id="L178">        var audioListener = new AudioListenerComponent();</span>
+<span class="fc" id="L179">        audioListener.offset.set(0f, 1f);</span>
+<span class="fc" id="L180">        entity.add(audioListener);</span>
+<span class="fc" id="L181">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

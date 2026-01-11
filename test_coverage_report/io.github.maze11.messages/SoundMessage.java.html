@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SoundMessage.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">headless</a> &gt; <a href="index.source.html" class="el_package">io.github.maze11.messages</a> &gt; <span class="el_source">SoundMessage.java</span></div><h1>SoundMessage.java</h1><pre class="source lang-java linenums">package io.github.maze11.messages;
+
+import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.math.Vector2;
+
+/** This message tells the AudioSystem to play a sound effect */
+public class SoundMessage extends Message{
+
+    /** The sound effect that this sound plays */
+    public final Sound sound;
+    /** When this is set to 0, the sound is always played at the same pitch.
+     * At 1, the pitch variance is highest*/
+    public final float pitchRandomness;
+    /** The volume between 0 and 1 before any modifiers are applied */
+    protected final float defaultVolume;
+
+    public SoundMessage(Sound sound, float defaultVolume) {
+<span class="nc" id="L18">        super(MessageType.SOUND_EFFECT);</span>
+<span class="nc" id="L19">        this.sound = sound;</span>
+<span class="nc" id="L20">        this.defaultVolume = defaultVolume;</span>
+<span class="nc" id="L21">        this.pitchRandomness = 0f;</span>
+<span class="nc" id="L22">    }</span>
+
+    public SoundMessage(Sound sound, float defaultVolume, float pitchRandomness) {
+<span class="nc" id="L25">        super(MessageType.SOUND_EFFECT);</span>
+<span class="nc" id="L26">        this.sound = sound;</span>
+<span class="nc" id="L27">        this.defaultVolume = defaultVolume;</span>
+<span class="nc" id="L28">        this.pitchRandomness = pitchRandomness;</span>
+<span class="nc" id="L29">    }</span>
+
+    /**
+     * Calculates the volume to play this sound at. This is different for derived classes of SoundMessage
+     * */
+    public float getEffectiveVolume(Vector2 listenerPosition){
+        // Base SoundMessage is unaffected by distance
+<span class="nc" id="L36">        return defaultVolume;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>
