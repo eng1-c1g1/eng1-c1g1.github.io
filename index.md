@@ -49,7 +49,7 @@ This ENG1 Assessment 2 is based on a given scenario: a single-player game where 
 ## **Source Code & Binaries -- UPDATE AT END**
 
 - <span style="font-size:1em;">[GitHub Repository](https://github.com/eng1-c1g1/ENG1-project)</span>  
-- <span style="font-size:1em;">[Executable JAR]()</span>
+- <span style="font-size:1em;">[Executable JAR](/assets/game.jar)</span>
 
 ---
 
